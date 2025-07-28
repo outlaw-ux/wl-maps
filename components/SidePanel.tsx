@@ -1,12 +1,24 @@
-import * as React from 'react';
-import { Drawer, IconButton, Accordion, AccordionSummary, AccordionDetails, Typography, TextField, Stack } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CloseIcon from '@mui/icons-material/Close';
+import * as React from "react";
+import {
+  Drawer,
+  IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  TextField,
+  Stack,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function SidePanel({ open, onClose }) {
   return (
     <Drawer anchor="left" open={open} onClose={onClose}>
-      <IconButton onClick={onClose} aria-label="close" sx={{ alignSelf: 'end', m: 1 }}>
+      <IconButton
+        onClick={onClose}
+        aria-label="close"
+        sx={{ alignSelf: "end", m: 1 }}>
         <CloseIcon />
       </IconButton>
       <Accordion defaultExpanded>

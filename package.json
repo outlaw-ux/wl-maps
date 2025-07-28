@@ -1,19 +1,40 @@
 {
   "name": "wl-maps",
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "author": "Kyle Knight <me@kknight.pro>",
+  "description": "A web application for displaying community maps using Next.js and Leaflet.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
   },
+  "packageManager": "yarn@4.9.2",
   "dependencies": {
-    "next": "14.1.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "@mui/material": "^5.14.2",
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
-    "react-leaflet": "^4.2.2",
-    "leaflet": "^1.9.4"
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@mui/icons-material": "7.2.0",
+    "@mui/material": "7.2.0",
+    "@mui/styled-engine": "7.2.0",
+    "leaflet": "1.9.4",
+    "leaflet-routing-machine": "3.2.12",
+    "next": "15.4.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-leaflet": "5.0.0",
+    "typescript": "5.8.3"
+  },
+  "devDependencies": {
+    "@types/leaflet": "1.9.20",
+    "@types/leaflet-routing-machine": "3.2.8",
+    "@types/node": "24.1.0",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
+    "@typescript-eslint/eslint-plugin": "8.38.0",
+    "@typescript-eslint/parser": "8.38.0",
+    "eslint": "9.32.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.3",
+    "prettier": "3.6.2"
   }
 }
