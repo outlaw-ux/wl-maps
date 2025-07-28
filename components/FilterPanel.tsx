@@ -12,7 +12,12 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
 
-const FilterPanel = ({ open, onClose }) => {
+interface SidePanelProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const FilterPanel = ({ open, onClose }: SidePanelProps) => {
   return (
     <Drawer anchor="left" open={open} onClose={onClose}>
       <IconButton

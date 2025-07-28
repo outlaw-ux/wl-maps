@@ -1,11 +1,12 @@
 import * as React from "react";
 import Head from "next/head";
+import type { AppProps } from "next/app";
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 import "../styles/globals.css";
 
 const theme = createTheme();
 
-const WoodlandMapsApp = ({ Component, pageProps }) => {
+const WoodlandMapsApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
