@@ -5,7 +5,7 @@ import "../styles/globals.css";
 
 const theme = createTheme();
 
-export default function MyApp({ Component, pageProps }) {
+const WoodlandMapsApp = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
@@ -17,4 +17,6 @@ export default function MyApp({ Component, pageProps }) {
       </ThemeProvider>
     </>
   );
-}
+};
+
+export default WoodlandMapsApp;

@@ -2,7 +2,7 @@ import * as React from "react";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 import { Box } from "@mui/material";
 
-export default function RealMap() {
+const MapLeaflet = () => {
   return (
     <Box sx={{ height: "100%", width: "100%" }}>
       <MapContainer
@@ -19,4 +19,6 @@ export default function RealMap() {
       </MapContainer>
     </Box>
   );
-}
+};
+
+export default MapLeaflet;

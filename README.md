@@ -1,12 +1,12 @@
-# WL Maps
+# Woodland Maps
 
-This is a starter Next.js project using Leaflet.js and MUI for a real-time map application. It currently contains a static layout with a collapsible side panel and a full-screen map view.
+A real-time navigation application for Woodland Lakes private recreational community in Sullivan, MO
 
 ## Development
 
 Install dependencies and run the development server:
 
 ```bash
-npm install
-npm run dev
+yarn install
+yarn dev
 ```

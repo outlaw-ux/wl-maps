@@ -12,7 +12,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function SidePanel({ open, onClose }) {
+const FilterPanel = ({ open, onClose }) => {
   return (
     <Drawer anchor="left" open={open} onClose={onClose}>
       <IconButton
@@ -45,4 +45,6 @@ export default function SidePanel({ open, onClose }) {
       </Accordion>
     </Drawer>
   );
-}
+};
+
+export default FilterPanel;
