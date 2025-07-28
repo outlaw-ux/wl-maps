@@ -1,24 +1,25 @@
-import * as React from "react";
-import { Box, IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import SidePanel from "../components/FilterPanel";
-import MapView from "../components/MapView";
+import * as React from 'react';
+import { Box, IconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import SidePanel from '../components/FilterPanel';
+import MapView from '../components/MapView';
 
 export default function Container() {
   const [open, setOpen] = React.useState(false);
   const toggle = () => setOpen(!open);
 
   return (
-    <Box sx={{ display: "flex", height: "100%" }}>
+    <Box sx={{ display: 'flex', height: '100%' }}>
       <SidePanel open={open} onClose={toggle} />
-      <Box sx={{ flex: 1, position: "relative" }}>
+      <Box sx={{ flex: 1, position: 'relative' }}>
         <IconButton
+          sx={{ position: 'absolute', top: 16, left: 16, zIndex: 1000 }}
+          aria-label="open filters"
           onClick={toggle}
-          sx={{ position: "absolute", top: 16, left: 16, zIndex: 1000 }}
-          aria-label="open filters">
+        >
           <MenuIcon />
         </IconButton>
-        <Box sx={{ height: "100%" }}>
+        <Box sx={{ height: '100%' }}>
           <MapView />
         </Box>
       </Box>

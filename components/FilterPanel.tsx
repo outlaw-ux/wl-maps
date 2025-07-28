@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Drawer,
   IconButton,
@@ -8,9 +8,9 @@ import {
   Typography,
   TextField,
   Stack,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CloseIcon from "@mui/icons-material/Close";
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface SidePanelProps {
   open: boolean;
@@ -21,9 +21,10 @@ const FilterPanel = ({ open, onClose }: SidePanelProps) => {
   return (
     <Drawer anchor="left" open={open} onClose={onClose}>
       <IconButton
-        onClick={onClose}
         aria-label="close"
-        sx={{ alignSelf: "end", m: 1 }}>
+        sx={{ alignSelf: 'end', m: 1 }}
+        onClick={onClose}
+      >
         <CloseIcon />
       </IconButton>
       <Accordion defaultExpanded>

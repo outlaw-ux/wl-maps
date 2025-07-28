@@ -1,8 +1,8 @@
-import * as React from "react";
-import Head from "next/head";
-import type { AppProps } from "next/app";
-import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
-import "../styles/globals.css";
+import * as React from 'react';
+import Head from 'next/head';
+import type { AppProps } from 'next/app';
+import { ThemeProvider, CssBaseline, createTheme } from '@mui/material';
+import '../styles/globals.css';
 
 const theme = createTheme();
 

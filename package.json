@@ -8,7 +8,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "tsc": "tsc --noEmit"
   },
   "packageManager": "yarn@4.9.2",
   "dependencies": {
@@ -33,9 +36,10 @@
     "@types/react-dom": "19.1.6",
     "@typescript-eslint/eslint-plugin": "8.38.0",
     "@typescript-eslint/parser": "8.38.0",
-    "eslint": "9.32.0",
+    "eslint": "8",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.3",
+    "eslint-plugin-react": "^7.37.5",
     "prettier": "3.6.2"
   }
 }
