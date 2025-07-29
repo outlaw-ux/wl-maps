@@ -41,7 +41,6 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
   };
 
   const handleNavigate = React.useCallback(() => {
-    console.log('Navigating with filter:', currentFilter);
     if (!currentFilter.lot || !currentFilter.block || !currentFilter.section) {
       setHasError(true);
       return;
@@ -58,77 +57,81 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
       onClose={onClose}
       variant={isMobile ? 'temporary' : 'permanent'}
     >
-      {isMobile && (
-        <IconButton
-          aria-label="close"
-          sx={{ alignSelf: 'end', m: 1 }}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      )}
-      <Accordion defaultExpanded>
-        {/* <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Box sx={{ py: 2 }}>
+        {isMobile && (
+          <IconButton
+            aria-label="close"
+            sx={{ alignSelf: 'end', m: 1 }}
+            onClick={onClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
+        <Accordion defaultExpanded>
+          {/* <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Navigation</Typography>
         </AccordionSummary> */}
-        <AccordionDetails>
-          {hasError && (
-            <Box sx={{ pb: 2 }}>
-              <Alert severity="warning">Please fill in all fields.</Alert>
-            </Box>
-          )}
-          <Stack spacing={2} sx={{ minWidth: 200 }}>
-            <TextField
-              autoFocus
-              defaultValue={currentFilter.lot}
-              label="Lot"
-              type="number"
-              size="small"
-              onChange={(evt) => {
-                nextFilter('lot', evt.target.value);
-              }}
-              error={hasError && !currentFilter.lot}
-              helperText={
-                hasError && !currentFilter.lot ? 'Lot is required' : ''
-              }
-            />
-            <TextField
-              defaultValue={currentFilter.block}
-              label="Block"
-              type="number"
-              size="small"
-              onChange={(evt) => {
-                nextFilter('block', evt.target.value);
-              }}
-              error={hasError && !currentFilter.block}
-              helperText={
-                hasError && !currentFilter.block ? 'Block is required' : ''
-              }
-            />
-            <TextField
-              defaultValue={currentFilter.section}
-              label="Section"
-              type="number"
-              size="small"
-              onChange={(evt) => {
-                nextFilter('section', evt.target.value);
-              }}
-              error={hasError && !currentFilter.section}
-              helperText={
-                hasError && !currentFilter.section ? 'Section is required' : ''
-              }
-            />
+          <AccordionDetails>
+            {hasError && (
+              <Box sx={{ pb: 2 }}>
+                <Alert severity="warning">Please fill in all fields.</Alert>
+              </Box>
+            )}
+            <Stack spacing={2} sx={{ minWidth: 200 }}>
+              <TextField
+                autoFocus
+                defaultValue={currentFilter.lot}
+                label="Lot"
+                type="number"
+                size="small"
+                onChange={(evt) => {
+                  nextFilter('lot', evt.target.value);
+                }}
+                error={hasError && !currentFilter.lot}
+                helperText={
+                  hasError && !currentFilter.lot ? 'Lot is required' : ''
+                }
+              />
+              <TextField
+                defaultValue={currentFilter.block}
+                label="Block"
+                type="number"
+                size="small"
+                onChange={(evt) => {
+                  nextFilter('block', evt.target.value);
+                }}
+                error={hasError && !currentFilter.block}
+                helperText={
+                  hasError && !currentFilter.block ? 'Block is required' : ''
+                }
+              />
+              <TextField
+                defaultValue={currentFilter.section}
+                label="Section"
+                type="number"
+                size="small"
+                onChange={(evt) => {
+                  nextFilter('section', evt.target.value);
+                }}
+                error={hasError && !currentFilter.section}
+                helperText={
+                  hasError && !currentFilter.section
+                    ? 'Section is required'
+                    : ''
+                }
+              />
 
-            <Button
-              variant="contained"
-              endIcon={<SendIcon />}
-              onClick={handleNavigate}
-            >
-              Navigate
-            </Button>
-          </Stack>
-        </AccordionDetails>
-      </Accordion>
+              <Button
+                variant="contained"
+                endIcon={<SendIcon />}
+                onClick={handleNavigate}
+              >
+                Navigate
+              </Button>
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
       {/* <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Layers</Typography>
@@ -138,7 +141,7 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
             Layer options go here.
           </Typography>
         </AccordionDetails>
-      </Accordion> */}
+      </Accordion    on> */}
     </Drawer>
   );
 };

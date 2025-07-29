@@ -1967,6 +1967,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/supports-color@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@types/supports-color@npm:10.0.0"
+  dependencies:
+    supports-color: "npm:*"
+  checksum: 10c0/760b0cb02d92330efcb304cdae54aaa2b07640d55efd7cd52738e5d815c171341f1221d3c6c9a3949b9486eb8836d489521fe9551be420d4e3467b202a1d575c
+  languageName: node
+  linkType: hard
+
 "@types/uuid@npm:^9.0.1":
   version: 9.0.8
   resolution: "@types/uuid@npm:9.0.8"
@@ -4710,6 +4719,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"supports-color@npm:*":
+  version: 10.0.0
+  resolution: "supports-color@npm:10.0.0"
+  checksum: 10c0/0e7884dfd02a07b3c6e0b235346f58c19f0201f1e44f7807583581761b354688c8577378785b5a4e3b03110809786c4c808e0e086cd91911f7b8bc59132703a8
+  languageName: node
+  linkType: hard
+
 "supports-color@npm:^7.1.0":
   version: 7.2.0
   resolution: "supports-color@npm:7.2.0"
@@ -4981,6 +4997,7 @@ __metadata:
     "@types/node": "npm:24.1.0"
     "@types/react": "npm:19.1.8"
     "@types/react-dom": "npm:19.1.6"
+    "@types/supports-color": "npm:^10.0.0"
     "@typescript-eslint/eslint-plugin": "npm:8.38.0"
     "@typescript-eslint/parser": "npm:8.38.0"
     eslint: "npm:8"

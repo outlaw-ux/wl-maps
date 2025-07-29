@@ -3,7 +3,7 @@
 const nextConfig = {
   reactStrictMode: true,
   // Generate a static export for GitHub Pages
-  output: 'export',
+  // output: 'export',
   images: {
     unoptimized: true,
   },
