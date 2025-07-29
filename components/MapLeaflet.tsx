@@ -24,7 +24,10 @@ const MapLeaflet = () => {
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <ZoomControl position="bottomright" />
-        <GeoJSON data={geoStreets as GeoJSON.FeatureCollection} style={{ color: '#fff', weight: 0, opacity: 0 }}/>
+        <GeoJSON
+          data={geoStreets as GeoJSON.FeatureCollection}
+          style={{ color: '#fff', weight: 0, opacity: 0 }}
+        />
         <UserLocationMarker />
       </MapContainer>
     </Box>
