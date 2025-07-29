@@ -16,7 +16,7 @@ const UserLocationMarker = () => {
 
   return position === null ? null : (
     <Marker position={position} icon={userIcon}>
-      <Popup>You are here</Popup>
+      <Popup>Your current location</Popup>
     </Marker>
   );
 };
