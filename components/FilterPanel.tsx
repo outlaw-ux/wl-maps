@@ -15,7 +15,7 @@ import {
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
-import type { Filters } from '../types';
+import type { Filters, IParcelsError } from '../types';
 import { useIsMobile } from '../hooks/useIsMobile';
 
 interface SidePanelProps {
@@ -23,11 +23,19 @@ interface SidePanelProps {
   onClose: () => void;
   filter: Filters;
   setFilter: React.Dispatch<React.SetStateAction<Filters>>;
+  filterErrors: IParcelsError;
+  setFilterErrors: React.Dispatch<React.SetStateAction<IParcelsError>>;
 }
 
-const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
+const FilterPanel = ({
+  open,
+  onClose,
+  filter,
+  setFilter,
+  filterErrors,
+  setFilterErrors,
+}: SidePanelProps) => {
   const [currentFilter, setCurrentFilter] = React.useState<Filters>(filter);
-  const [hasError, setHasError] = React.useState(false);
 
   const isMobile = useIsMobile();
 
@@ -42,12 +50,17 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
 
   const handleNavigate = React.useCallback(() => {
     if (!currentFilter.lot || !currentFilter.block || !currentFilter.section) {
-      setHasError(true);
+      setFilterErrors((prevErr) => ({
+        ...prevErr,
+        incompleteAddress: true,
+      }));
       return;
     }
-    setHasError(false);
+    setFilterErrors((prevErr) => ({
+      ...prevErr,
+      incompleteAddress: false,
+    }));
     setFilter(currentFilter);
-    onClose();
   }, [currentFilter, onClose, setFilter]);
 
   return (
@@ -72,9 +85,14 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
           <Typography>Navigation</Typography>
         </AccordionSummary> */}
           <AccordionDetails>
-            {hasError && (
+            {filterErrors.incompleteAddress && (
               <Box sx={{ pb: 2 }}>
-                <Alert severity="warning">Please fill in all fields.</Alert>
+                <Alert severity="warning">Please fill in all fields</Alert>
+              </Box>
+            )}
+            {filterErrors.invalidAddress && (
+              <Box sx={{ pb: 2 }}>
+                <Alert severity="warning">Invalid property address</Alert>
               </Box>
             )}
             <Stack spacing={2} sx={{ minWidth: 200 }}>
@@ -87,9 +105,10 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
                 onChange={(evt) => {
                   nextFilter('lot', evt.target.value);
                 }}
-                error={hasError && !currentFilter.lot}
                 helperText={
-                  hasError && !currentFilter.lot ? 'Lot is required' : ''
+                  filterErrors.incompleteAddress && !currentFilter.lot
+                    ? 'Lot is required'
+                    : ''
                 }
               />
               <TextField
@@ -100,9 +119,10 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
                 onChange={(evt) => {
                   nextFilter('block', evt.target.value);
                 }}
-                error={hasError && !currentFilter.block}
                 helperText={
-                  hasError && !currentFilter.block ? 'Block is required' : ''
+                  filterErrors.incompleteAddress && !currentFilter.block
+                    ? 'Block is required'
+                    : ''
                 }
               />
               <TextField
@@ -113,9 +133,8 @@ const FilterPanel = ({ open, onClose, filter, setFilter }: SidePanelProps) => {
                 onChange={(evt) => {
                   nextFilter('section', evt.target.value);
                 }}
-                error={hasError && !currentFilter.section}
                 helperText={
-                  hasError && !currentFilter.section
+                  filterErrors.incompleteAddress && !currentFilter.section
                     ? 'Section is required'
                     : ''
                 }
