@@ -21,7 +21,14 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
   const [destLatLng, setDestLatLng] = useState<L.LatLng | null>(null);
 
   useEffect(() => {
-    if (!destination || !destination.geometry) return;
+    if (!destination || !destination.geometry) {
+      if (control) {
+        map.removeControl(control);
+        setControl(null);
+      }
+      setDestLatLng(null);
+      return;
+    }
 
     const parsed = parseGeometry(destination.geometry);
     if (!parsed) return;
@@ -51,7 +58,11 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
           },
           routeWhileDragging: false,
           draggableWaypoints: false,
-          createMarker: () => null, // Disable default markers
+          createMarker: () => null,
+          formatter: new L.Routing.Formatter({
+            units: 'imperial',
+            distanceTemplate: '{value} {unit}',
+          }),
           show: true,
         } as CustomRoutingControlOptions).addTo(map);
 
