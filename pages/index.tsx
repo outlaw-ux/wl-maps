@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import FilterPanel from '../components/FilterPanel';
 import MapView from '../components/MapView';
 import { useEffect, useState } from 'react';
-import type { Filters, IParcelsError } from '../types';
+import type { Filters, IParcelsError, Parcel } from '../types';
 import { fetchLBS } from '../utils/fetchLBS';
 
 export default function Container() {
@@ -14,6 +14,7 @@ export default function Container() {
     invalidAddress: false,
     incompleteAddress: false,
   });
+  const [destination, setDestination] = useState<Parcel | null>(null);
   const toggle = () => setOpen(!open);
 
   useEffect(() => {
@@ -23,7 +24,8 @@ export default function Container() {
         if (res.length === 0) {
           setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: true }));
         } else {
-          setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: true }));
+          setDestination(res[0]);
+          setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: false }));
         }
       }
     };
@@ -51,7 +53,7 @@ export default function Container() {
           <MenuIcon />
         </Button>
         <Box sx={{ height: '100%' }}>
-          <MapView />
+          <MapView destination={destination} />
         </Box>
       </Box>
     </Box>

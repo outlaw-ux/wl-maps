@@ -1,4 +1,4 @@
-import { Filters } from '../types';
+import { Filters, Parcel } from '../types';
 
 export const fetchLBS = async ({ lot, block, section }: Filters) => {
   const params = new URLSearchParams({ lot, block, section });
@@ -8,5 +8,5 @@ export const fetchLBS = async ({ lot, block, section }: Filters) => {
     throw new Error('Failed to fetch');
   }
 
-  return await res.json();
+  return (await res.json()) as Parcel[];
 };
