@@ -11,7 +11,8 @@ export interface IParcelsError {
   readonly incompleteAddress: boolean;
 }
 
-export interface CustomRoutingControlOptions extends L.Routing.RoutingControlOptions {
+export interface CustomRoutingControlOptions
+  extends L.Routing.RoutingControlOptions {
   draggableWaypoints?: boolean;
 }
 
