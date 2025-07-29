@@ -12,3 +12,4 @@ body {
 
 /* Leaflet requires this import */
 @import url('leaflet/dist/leaflet.css');
+@import url('leaflet-routing-machine/dist/leaflet-routing-machine.css');

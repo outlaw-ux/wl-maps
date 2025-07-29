@@ -2848,7 +2848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet-routing-machine@npm:3.2.12":
+"leaflet-routing-machine@npm:^3.2.12":
   version: 3.2.12
   resolution: "leaflet-routing-machine@npm:3.2.12"
   dependencies:
@@ -4264,7 +4264,7 @@ __metadata:
     eslint-plugin-prettier: "npm:5.5.3"
     eslint-plugin-react: "npm:^7.37.5"
     leaflet: "npm:1.9.4"
-    leaflet-routing-machine: "npm:3.2.12"
+    leaflet-routing-machine: "npm:^3.2.12"
     next: "npm:15.4.4"
     prettier: "npm:3.6.2"
     react: "npm:19.1.0"

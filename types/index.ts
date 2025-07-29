@@ -1,3 +1,5 @@
+import type L from 'leaflet';
+
 export type Filters = {
   readonly lot?: string;
   readonly block?: string;
@@ -7,6 +9,10 @@ export type Filters = {
 export interface IParcelsError {
   readonly invalidAddress: boolean;
   readonly incompleteAddress: boolean;
+}
+
+export interface CustomRoutingControlOptions extends L.Routing.RoutingControlOptions {
+  draggableWaypoints?: boolean;
 }
 
 // SUPABASE TYPES
