@@ -1,56 +1,37 @@
+import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
-import { getLegalDescRegex } from '../../utils/getLegalDescRegex';
 
-const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { query, method } = req;
-  const { lot, block, section } = query;
-
-  if (method === 'GET') {
-    if (
-      !lot ||
-      !block ||
-      !section ||
-      Array.isArray(lot) ||
-      Array.isArray(block) ||
-      Array.isArray(section)
-    ) {
-      res
-        .status(400)
-        .json({ error: 'Missing lot, block, or section parameter' });
-
-      const regex = getLegalDescRegex(
-        lot.toString(),
-        block.toString(),
-        section.toString()
-      );
-
-      try {
-        const command = new ScanCommand({
-          TableName: 'Parcels',
-          IndexName: 'legaldesc-index',
-        });
-
-        const result = await client.send(command);
-        const items = (result.Items ?? []).filter(
-          (item) =>
-            typeof item.legaldesc === 'string' && regex?.test(item.legaldesc)
-        );
-        res.status(200).json({ items });
-        res.status(200).json({ items: result.Items ?? [] });
-      } catch (error) {
-        console.error('DynamoDB query error', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
-    }
-  } else {
-    res.setHeader('Allow', ['GET']);
-    res.status(405).end(`Method ${method} Not Allowed`);
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  const { lot, block, section } = req.query;
+
+  if (!lot || !block || !section) {
+    return res
+      .status(400)
+      .json({ error: 'Missing lot, block, or section query params' });
+  }
+
+  const { data, error } = await supabase
+    .from('parcels')
+    .select('*')
+    .eq('lot', lot)
+    .eq('block', block)
+    .eq('section', section);
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  return res.status(200).json(data);
 }

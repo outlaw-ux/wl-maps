@@ -4,29 +4,26 @@ import MenuIcon from '@mui/icons-material/Menu';
 import FilterPanel from '../components/FilterPanel';
 import MapView from '../components/MapView';
 import { useEffect, useState } from 'react';
-import type { Filters } from '../types';
+import type { Filters, IParcelsError } from '../types';
+import { fetchLBS } from '../utils/fetchLBS';
 
 export default function Container() {
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState<Filters>({});
+  const [filterErrors, setFilterErrors] = useState<IParcelsError>({
+    invalidAddress: false,
+    incompleteAddress: false,
+  });
   const toggle = () => setOpen(!open);
 
   useEffect(() => {
     const searchParcels = async () => {
-      console.log('Searching parcels with filter:', filter);
       if (filter.lot && filter.block && filter.section) {
-        try {
-          const params = new URLSearchParams({
-            lot: filter.lot,
-            block: filter.block,
-            section: filter.section,
-          });
-          const response = await fetch(`/api/parcels?${params.toString()}`);
-          console.log('Response status:', response);
-          const data = await response.json();
-          console.log('Parcels found:', data.items);
-        } catch (error) {
-          console.error('Parcel search error', error);
+        const res = await fetchLBS(filter);
+        if (res.length === 0) {
+          setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: true }));
+        } else {
+          setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: true }));
         }
       }
     };
@@ -37,6 +34,8 @@ export default function Container() {
     <Box sx={{ display: 'flex', height: '100%' }}>
       <FilterPanel
         open={open}
+        filterErrors={filterErrors}
+        setFilterErrors={setFilterErrors}
         filter={filter}
         setFilter={setFilter}
         onClose={toggle}

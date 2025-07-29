@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Head from 'next/head';
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from '@vercel/analytics/next';
 import type { AppProps } from 'next/app';
 import { ThemeProvider, CssBaseline, createTheme } from '@mui/material';
 import '../styles/globals.css';
