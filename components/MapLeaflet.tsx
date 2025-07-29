@@ -2,13 +2,19 @@ import { MapContainer, TileLayer, ZoomControl, GeoJSON } from 'react-leaflet';
 import { Box } from '@mui/material';
 import UserLocationMarker from './UserLocationMarker';
 import geoStreets from '../data/streets.json';
+import type { Parcel } from '../types';
 
 const bounds: L.LatLngBoundsExpression = [
   [38.091, -91.093], // Southwest corner
   [38.139, -91.048], // Northeast corner
 ];
 
-const MapLeaflet = () => {
+const MapLeaflet = ({
+  destination,
+}: {
+  readonly destination: Parcel | null;
+}) => {
+  console.log({ destination });
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       <MapContainer

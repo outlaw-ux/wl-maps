@@ -6,8 +6,8 @@ const Map = dynamic(() => import('./MapLeaflet'), {
   loading: () => <Box sx={{ flex: 1 }}>Loading map...</Box>,
 });
 
-const MapView = () => {
-  return <Map />;
+const MapView = (props) => {
+  return <Map {...props} />;
 };
 
 export default MapView;
