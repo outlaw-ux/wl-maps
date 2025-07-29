@@ -1,11 +1,12 @@
 import { MapContainer, TileLayer, ZoomControl, GeoJSON } from 'react-leaflet';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import UserLocationMarker from './UserLocationMarker';
 import geoStreets from '../data/streets.json';
 import type { Parcel } from '../types';
 import RoutingControl from './RoutingControl';
+import LocateButton from './LocateMeButton';
 
 const bounds: L.LatLngBoundsExpression = [
   [38.091, -91.1068],
@@ -14,8 +15,10 @@ const bounds: L.LatLngBoundsExpression = [
 
 const MapLeaflet = ({
   destination,
+  setDestination,
 }: {
   readonly destination: Parcel | null;
+  readonly setDestination: React.Dispatch<React.SetStateAction<Parcel | null>>;
 }) => {
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
@@ -37,7 +40,19 @@ const MapLeaflet = ({
           style={{ color: '#fff', weight: 0, opacity: 0 }}
         />
         <UserLocationMarker />
+        <LocateButton />
         <RoutingControl destination={destination} />
+        {destination && (
+          <Button
+            sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 1000 }}
+            aria-label="cancel navigation"
+            onClick={() => setDestination(null)}
+            variant="contained"
+            color="warning"
+          >
+            Cancel
+          </Button>
+        )}
       </MapContainer>
     </Box>
   );

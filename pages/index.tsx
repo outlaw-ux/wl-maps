@@ -26,6 +26,7 @@ export default function Container() {
         } else {
           setDestination(res[0]);
           setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: false }));
+          setOpen(false);
         }
       }
     };
@@ -53,7 +54,7 @@ export default function Container() {
           <MenuIcon />
         </Button>
         <Box sx={{ height: '100%' }}>
-          <MapView destination={destination} />
+          <MapView destination={destination} setDestination={setDestination} />
         </Box>
       </Box>
     </Box>
