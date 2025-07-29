@@ -30,15 +30,6 @@ module.exports = {
     'react/jsx-indent': ['error', 2],
     'react/jsx-indent-props': ['error', 2],
     'react/jsx-no-comment-textnodes': 'error',
-    'react/jsx-sort-props': [
-      'error',
-      {
-        shorthandFirst: true,
-        callbacksLast: true,
-        noSortAlphabetically: true,
-        reservedFirst: true,
-      },
-    ],
   },
   settings: {
     react: {
