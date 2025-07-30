@@ -8,7 +8,10 @@ const LocateButton = () => {
   useEffect(() => {
     const LocateControl = L.Control.extend({
       onAdd: function () {
-        const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
+        const button = L.DomUtil.create(
+          'button',
+          'leaflet-bar leaflet-control leaflet-control-custom'
+        );
         button.innerHTML = '📍';
         button.title = 'Locate Me';
         button.style.width = '34px';
@@ -38,7 +41,7 @@ const LocateButton = () => {
         });
 
         return button;
-      }
+      },
     });
 
     const control = new LocateControl({ position: 'bottomright' });
