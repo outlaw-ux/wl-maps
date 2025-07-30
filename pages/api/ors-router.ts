@@ -20,13 +20,19 @@ export default async function handler(
     });
   }
 
+  if (!process.env.HEIGIT_ORS_ACCESS_KEY) {
+    return res.status(500).json({
+      error: 'Server configuration error: HEIGIT_ORS_ACCESS_KEY is not set.',
+    });
+  }
+
   try {
     const orsRes = await fetch(
       'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
       {
         method: 'POST',
         headers: {
-          Authorization: process.env.HEIGIT_ORS_ACCESS_KEY!,
+          Authorization: process.env.HEIGIT_ORS_ACCESS_KEY,
           'Content-Type': 'application/json',
           Accept:
             'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
