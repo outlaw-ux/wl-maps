@@ -33,8 +33,7 @@ const LocateButton = () => {
               map.setView([lat, lng], map.getZoom(), { animate: true });
             },
             (err) => {
-              console.error('Failed to locate:', err);
-              alert('Could not retrieve your location.');
+              alert('Could not retrieve your location. Please make sure location services are enabled on your device.');
             },
             { enableHighAccuracy: true }
           );

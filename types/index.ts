@@ -98,7 +98,7 @@ export interface Parcel {
   readonly ll_updated_at?: string | Date | null; // timestamp with time zone
   readonly ll_uuid?: string | null;
   readonly location_name?: string | null;
-  readonly lot?: string | null;
+  readonly lots?: string[] | null;
   readonly lot_dimens?: string | null;
   readonly mail_addno?: string | null;
   readonly mail_addpref?: string | null;

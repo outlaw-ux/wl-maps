@@ -20,25 +20,21 @@ export default async function handler(
     });
   }
 
-  const params = new URLSearchParams({
-    api_key: process.env.HEIGIT_ORS_ACCESS_KEY!,
-    start: coordinates[0].join(','),
-    end: coordinates[coordinates.length - 1].join(','),
-    waypoints: coordinates
-      .slice(1, -1)
-      .map((coord: [number, number]) => coord.join(','))
-      .join('|'),
-  });
-
   try {
     const orsRes = await fetch(
-      `https://api.openrouteservice.org/v2/directions/driving-car?${params}`,
+      'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           Authorization: process.env.HEIGIT_ORS_ACCESS_KEY!,
           'Content-Type': 'application/json',
+          Accept:
+            'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
         },
+
+        body: JSON.stringify({
+          coordinates,
+        }),
       }
     );
 
