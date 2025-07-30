@@ -19,26 +19,25 @@ const destinationIcon = L.icon({
 const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
   const map = useMap();
   const [control, setControl] = useState<L.Routing.Control | null>(null);
-  const [destLatLng, setDestLatLng] = useState<L.LatLng | null>(null);
 
   const detour = L.latLng(38.10640828782876, -91.06830100257955); // known detour to force reroute
+  const parsedDestination = destination
+    ? parseGeometry(destination.geometry)
+    : null;
+  const [lat, lng] = parsedDestination ? parsedDestination : [];
+  const destLatLng = lat && lng ? L.latLng(lat, lng) : null;
 
   useEffect(() => {
-    if (!destination || !destination.geometry) {
+    if (!parsedDestination) {
       if (control) {
         map.removeControl(control);
         setControl(null);
       }
-      setDestLatLng(null);
+      // setDestLatLng(null);
       return;
     }
 
-    const parsed = parseGeometry(destination.geometry);
-    if (!parsed) return;
-
-    const [lat, lng] = parsed;
-    const dest = L.latLng(lat, lng);
-    setDestLatLng(dest);
+    // setDestLatLng(dest);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -64,7 +63,7 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
         let rerouted = false;
 
         const routingControl = L.Routing.control({
-          waypoints: [startPoint, dest],
+          waypoints: [startPoint, destLatLng],
           lineOptions: {
             addWaypoints: false,
             styles: [{ color: '#00f', weight: 2, opacity: 0.7 }],
@@ -92,7 +91,7 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
               const waypoints = [
                 L.Routing.waypoint(startPoint),
                 L.Routing.waypoint(detour),
-                L.Routing.waypoint(dest),
+                L.Routing.waypoint(destLatLng),
               ];
 
               // Replace waypoints with detour included
