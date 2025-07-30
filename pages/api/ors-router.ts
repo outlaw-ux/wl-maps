@@ -6,13 +6,28 @@ export default async function handler(
 ) {
   const { coordinates } = req.body;
 
+  if (
+    !Array.isArray(coordinates) ||
+    !coordinates.every(
+      (coord) =>
+        Array.isArray(coord) &&
+        coord.length === 2 &&
+        coord.every((num) => typeof num === 'number')
+    )
+  ) {
+    return res.status(400).json({
+      error: 'Invalid coordinates. Must be an array of [number, number] pairs.',
+    });
+  }
+
   const params = new URLSearchParams({
     api_key: process.env.HEIGIT_ORS_ACCESS_KEY!,
     start: coordinates[0].join(','),
     end: coordinates[coordinates.length - 1].join(','),
     waypoints: coordinates
       .slice(1, -1)
-      .map((coord: [number, number]) => coord.join(',')),
+      .map((coord: [number, number]) => coord.join(','))
+      .join('|'),
   });
 
   try {
