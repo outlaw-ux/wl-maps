@@ -31,7 +31,6 @@ export default async function handler(
     .eq('block', block)
     .eq('section', section);
 
-
   if (error) {
     return res.status(500).json({ error: error.message });
   }

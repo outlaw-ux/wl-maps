@@ -29,7 +29,7 @@ const MapLeaflet = ({
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <ZoomControl position="bottomright" />
-        <UserLocationMarker />
+        <UserLocationMarker navigating={!!destination} />
         <LocateButton />
         <RoutingControl destination={destination} />
         {destination && (

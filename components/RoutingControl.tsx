@@ -38,6 +38,7 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
 
     const [lat, lng] = parsed;
     const dest = L.latLng(lat, lng);
+    setDestLatLng(dest);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
