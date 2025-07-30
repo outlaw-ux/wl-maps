@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import { generateUserIcon } from './Icons';
 
-// Optional: Custom blue dot icon to look like a location marker
-const userIcon = L.icon({
-  iconUrl: '/property-marker.svg', // or use your own
-  iconSize: [25, 24],
-});
-
-const UserLocationMarker = () => {
+const UserLocationMarker = ({
+  navigating,
+}: {
+  readonly navigating: boolean;
+}) => {
   const [position, setPosition] = useState<L.LatLng | null>(null);
   const map = useMap();
 
@@ -24,6 +23,8 @@ const UserLocationMarker = () => {
       { enableHighAccuracy: true }
     );
   }, [map]);
+
+  const userIcon = generateUserIcon(navigating);
 
   return position ? <Marker position={position} icon={userIcon} /> : null;
 };
