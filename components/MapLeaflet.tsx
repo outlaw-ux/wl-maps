@@ -1,17 +1,11 @@
-import { MapContainer, TileLayer, ZoomControl, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { Box, Button } from '@mui/material';
-import L from 'leaflet';
 import 'leaflet-routing-machine';
 import UserLocationMarker from './UserLocationMarker';
-import geoStreets from '../data/streets.json';
 import type { Parcel } from '../types';
 import RoutingControl from './RoutingControl';
 import LocateButton from './LocateMeButton';
-
-const bounds: L.LatLngBoundsExpression = [
-  [38.091, -91.1068],
-  [38.139, -91.048],
-];
+import { bounds } from '../constants';
 
 const MapLeaflet = ({
   destination,
@@ -35,10 +29,6 @@ const MapLeaflet = ({
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <ZoomControl position="bottomright" />
-        <GeoJSON
-          data={geoStreets as GeoJSON.FeatureCollection}
-          style={{ color: '#fff', weight: 0, opacity: 0 }}
-        />
         <UserLocationMarker />
         <LocateButton />
         <RoutingControl destination={destination} />

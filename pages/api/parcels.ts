@@ -22,12 +22,15 @@ export default async function handler(
       .json({ error: 'Missing lot, block, or section query params' });
   }
 
+  const lotsString = String(Array.isArray(lot) ? lot[0] : lot).toUpperCase();
+
   const { data, error } = await supabase
     .from('parcels')
     .select('*')
-    .eq('lot', lot)
+    .contains('lots', [lotsString])
     .eq('block', block)
     .eq('section', section);
+
 
   if (error) {
     return res.status(500).json({ error: error.message });

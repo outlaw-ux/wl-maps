@@ -11,6 +11,7 @@ import {
   Button,
   Alert,
   Box,
+  Link,
 } from '@mui/material';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SendIcon from '@mui/icons-material/Send';
@@ -70,7 +71,7 @@ const FilterPanel = ({
       onClose={onClose}
       variant={isMobile ? 'temporary' : 'permanent'}
     >
-      <Box sx={{ py: 2 }}>
+      <Box sx={{ py: 2, height: 'inherit' }}>
         {isMobile && (
           <IconButton
             aria-label="close"
@@ -100,7 +101,7 @@ const FilterPanel = ({
                 autoFocus
                 defaultValue={currentFilter.lot}
                 label="Lot"
-                type="number"
+                type="string"
                 size="small"
                 onChange={(evt) => {
                   nextFilter('lot', evt.target.value);
@@ -150,6 +151,20 @@ const FilterPanel = ({
             </Stack>
           </AccordionDetails>
         </Accordion>
+      </Box>
+      {/* provide attribution to @project-osrm/osrm  */}
+      <Box sx={{ p: 2, fontSize: '0.8rem', color: 'text.secondary' }}>
+        <span>
+          Map data ©{' '}
+          <Link href="https://www.openstreetmap.org/copyright">
+            OpenStreetMap
+          </Link>
+        </span>
+        <br />
+        <span>
+          Routing data ©{' '}
+          <Link href="https://project-osrm.org/">Project OSRM</Link>
+        </span>
       </Box>
       {/* <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
