@@ -35,7 +35,7 @@ export function createORSRouter(
               L.latLng(lat, lng)
             );
 
-            return callback.call(context, null, [
+            callback.call(context, null, [
               {
                 name: `Navigating to: ${lot}-${block}-${section}`,
                 coordinates: latLngs,
