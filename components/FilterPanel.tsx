@@ -101,7 +101,7 @@ const FilterPanel = ({
                 autoFocus
                 defaultValue={currentFilter.lot}
                 label="Lot"
-                type="number"
+                type="string"
                 size="small"
                 onChange={(evt) => {
                   nextFilter('lot', evt.target.value);
