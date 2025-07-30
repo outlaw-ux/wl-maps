@@ -57,6 +57,8 @@ export function createORSRouter(
                 actualWaypoints: waypoints,
               },
             ]);
+          } else {
+            callback.call(context, new Error("Invalid API response structure"));
           }
         })
         .catch((err) => callback.call(context, err));
