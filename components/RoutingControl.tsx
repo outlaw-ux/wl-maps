@@ -3,6 +3,7 @@ import L from 'leaflet';
 import { useEffect, useState } from 'react';
 import type { CustomRoutingControlOptions, Parcel } from '../types';
 import { bounds, fallbackStart } from '../constants';
+import { createORSRouter } from '../utils/createORSRouter';
 
 const parseGeometry = (geometry: string): [number, number] | null => {
   const match = geometry.match(/POINT\((-?\d+\.?\d*) (-?\d+\.?\d*)\)/);
@@ -33,11 +34,8 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
         map.removeControl(control);
         setControl(null);
       }
-      // setDestLatLng(null);
       return;
     }
-
-    // setDestLatLng(dest);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -64,6 +62,11 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
 
         const routingControl = L.Routing.control({
           waypoints: [startPoint, destLatLng],
+          router: createORSRouter('/api/ors-router', {
+            lot: destination?.lots?.join(', ') || '',
+            block: destination?.block,
+            section: destination?.section,
+          }),
           lineOptions: {
             addWaypoints: false,
             styles: [{ color: '#00f', weight: 2, opacity: 0.7 }],
