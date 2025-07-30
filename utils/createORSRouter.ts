@@ -20,15 +20,15 @@ export function createORSRouter(
         .then((res) => res.json())
         .then((data) => {
           if (
-            (data.features,
-            Array.isArray(data.features),
-            data.features.length > 0,
-            data.features[0].geometry,
-            data.features[0].geometry.coordinates,
-            data.features[0].properties,
-            data.features[0].properties.segments,
-            Array.isArray(data.features[0].properties.segments),
-            data.features[0].properties.segments.length > 0)
+            data.features &&
+            Array.isArray(data.features) &&
+            data.features.length > 0 &&
+            data.features[0].geometry &&
+            data.features[0].geometry.coordinates &&
+            data.features[0].properties &&
+            data.features[0].properties.segments &&
+            Array.isArray(data.features[0].properties.segments) &&
+            data.features[0].properties.segments.length > 0
           ) {
             const geometry = data.features[0].geometry.coordinates;
             const latLngs = geometry.map(([lng, lat]: number[]) =>
