@@ -34,11 +34,8 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
         map.removeControl(control);
         setControl(null);
       }
-      // setDestLatLng(null);
       return;
     }
-
-    // setDestLatLng(dest);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
