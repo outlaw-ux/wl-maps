@@ -63,7 +63,7 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
         const routingControl = L.Routing.control({
           waypoints: [startPoint, destLatLng],
           router: createORSRouter('/api/ors-router', {
-            lot: destination?.lots.join(', '),
+            lot: destination?.lots?.join(', ') || '',
             block: destination?.block,
             section: destination?.section,
           }),
