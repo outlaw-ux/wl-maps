@@ -11,7 +11,7 @@ const getIconName = (
   if (maneuverType === 'arrive') {
     return 'DestinationReached';
   }
-  if (maneuverType === 'turn') {
+  if (maneuverType === 'turn' || maneuverType === 'continue') {
     switch (maneuverModifier) {
       case 'slight left':
         return 'SlightLeft';
@@ -33,11 +33,7 @@ const getIconName = (
     }
   }
   // #1"new name"
-  if (
-    maneuverType === 'new name' ||
-    maneuverType === 'continue' ||
-    maneuverType === 'use lane'
-  ) {
+  if (maneuverType === 'new name' || maneuverType === 'use lane') {
     return 'Straight';
   }
   // #4"merge"

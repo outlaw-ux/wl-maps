@@ -3,20 +3,23 @@ import {
   Drawer,
   IconButton,
   Accordion,
-  // AccordionSummary,
   AccordionDetails,
-  // Typography,
   TextField,
   Stack,
   Button,
   Alert,
   Box,
+  AccordionSummary,
+  ListItem,
+  ListItemText,
+  Typography,
 } from '@mui/material';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import type { Filters, IParcelsError } from '../types';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { pois } from '../data/poi';
 
 interface SidePanelProps {
   open: boolean;
@@ -80,98 +83,114 @@ const FilterPanel = ({
       onClose={onClose}
       variant={isMobile ? 'temporary' : 'permanent'}
     >
-      <Box sx={{ py: 2, height: 'inherit' }}>
-        {isMobile && (
-          <IconButton
-            aria-label="close"
-            sx={{ alignSelf: 'end', m: 1 }}
-            onClick={onClose}
-          >
-            <CloseIcon />
-          </IconButton>
-        )}
-        <Accordion defaultExpanded>
-          {/* <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Navigation</Typography>
-        </AccordionSummary> */}
-          <AccordionDetails>
-            {filterErrors.incompleteAddress && (
-              <Box sx={{ pb: 2 }}>
-                <Alert severity="warning">Please fill in all fields</Alert>
-              </Box>
-            )}
-            {filterErrors.invalidAddress && (
-              <Box sx={{ pb: 2 }}>
-                <Alert severity="warning">Invalid property address</Alert>
-              </Box>
-            )}
-            <Stack spacing={2} sx={{ minWidth: 200 }}>
-              <TextField
-                autoFocus
-                defaultValue={currentFilter?.lot}
-                label="Lot"
-                type="string"
-                size="small"
-                onChange={(evt) => {
-                  nextFilter('lot', evt.target.value);
-                }}
-                helperText={
-                  filterErrors.incompleteAddress && !currentFilter?.lot
-                    ? 'Lot is required'
-                    : ''
-                }
-              />
-              <TextField
-                defaultValue={currentFilter?.block}
-                label="Block"
-                type="number"
-                size="small"
-                onChange={(evt) => {
-                  nextFilter('block', evt.target.value);
-                }}
-                helperText={
-                  filterErrors.incompleteAddress && !currentFilter?.block
-                    ? 'Block is required'
-                    : ''
-                }
-              />
-              <TextField
-                defaultValue={currentFilter?.section}
-                label="Section"
-                type="number"
-                size="small"
-                onChange={(evt) => {
-                  nextFilter('section', evt.target.value);
-                }}
-                helperText={
-                  filterErrors.incompleteAddress && !currentFilter?.section
-                    ? 'Section is required'
-                    : ''
-                }
-              />
+      {isMobile && (
+        <IconButton
+          aria-label="close"
+          sx={{ alignSelf: 'end', m: 1 }}
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </IconButton>
+      )}
+      <Accordion defaultExpanded>
+        <AccordionDetails>
+          {filterErrors.incompleteAddress && (
+            <Box sx={{ pb: 2 }}>
+              <Alert severity="warning">Please fill in all fields</Alert>
+            </Box>
+          )}
+          {filterErrors.invalidAddress && (
+            <Box sx={{ pb: 2 }}>
+              <Alert severity="warning">Invalid property address</Alert>
+            </Box>
+          )}
+          <Stack spacing={2} sx={{ minWidth: 200 }}>
+            <TextField
+              autoFocus
+              defaultValue={currentFilter?.lot}
+              label="Lot"
+              type="string"
+              size="small"
+              onChange={(evt) => {
+                nextFilter('lot', evt.target.value);
+              }}
+              helperText={
+                filterErrors.incompleteAddress && !currentFilter?.lot
+                  ? 'Lot is required'
+                  : ''
+              }
+            />
+            <TextField
+              defaultValue={currentFilter?.block}
+              label="Block"
+              type="number"
+              size="small"
+              onChange={(evt) => {
+                nextFilter('block', evt.target.value);
+              }}
+              helperText={
+                filterErrors.incompleteAddress && !currentFilter?.block
+                  ? 'Block is required'
+                  : ''
+              }
+            />
+            <TextField
+              defaultValue={currentFilter?.section}
+              label="Section"
+              type="number"
+              size="small"
+              onChange={(evt) => {
+                nextFilter('section', evt.target.value);
+              }}
+              helperText={
+                filterErrors.incompleteAddress && !currentFilter?.section
+                  ? 'Section is required'
+                  : ''
+              }
+            />
 
-              <Button
-                variant="contained"
-                endIcon={<SendIcon />}
-                onClick={handleNavigate}
-              >
-                Navigate
-              </Button>
-            </Stack>
-          </AccordionDetails>
-        </Accordion>
-      </Box>
+            <Button
+              variant="contained"
+              endIcon={<SendIcon />}
+              onClick={handleNavigate}
+            >
+              Navigate
+            </Button>
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
 
-      {/* <Accordion>
+      <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Layers</Typography>
+          <Typography>Points of Interest</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="body2" color="text.secondary">
-            Layer options go here.
-          </Typography>
+          {pois.map((poi) =>
+            poi.items.map((item) => (
+              <ListItem
+                key={item.name}
+                disableGutters
+                secondaryAction={
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => {
+                      console.log(
+                        `Navigating to ${item.name}`,
+                        item
+                      ); /* Implement navigation logic here */
+                    }}
+                  >
+                    GO
+                  </Button>
+                }
+              >
+                <ListItemText primary={item.name} />
+              </ListItem>
+            ))
+          )}
         </AccordionDetails>
-      </Accordion    on> */}
+      </Accordion>
     </Drawer>
   );
 };
