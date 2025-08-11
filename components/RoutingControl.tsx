@@ -5,6 +5,61 @@ import type { CustomRoutingControlOptions, Parcel } from '../types';
 import { bounds, fallbackStart } from '../constants';
 import { createORSRouter } from '../utils/createORSRouter';
 
+class RoutingFormatter extends L.Routing.Formatter {
+  constructor(options: L.Routing.FormatterOptions) {
+    super(options);
+  }
+
+  getIconName(
+    instr: L.Routing.IInstruction,
+    i?: number
+  ):
+    | 'depart'
+    | 'via'
+    | 'enter-roundabout'
+    | 'arrive'
+    | 'continue'
+    | 'bear-right'
+    | 'turn-right'
+    | 'sharp-right'
+    | 'u-turn'
+    | 'sharp-left'
+    | 'turn-left'
+    | 'bear-left' {
+    switch (instr.type) {
+      case 'StartAt':
+        return 'depart';
+      case 'DestinationReached':
+        return 'arrive';
+      case 'SlightLeft':
+        return 'bear-left';
+      case 'SharpLeft':
+        return 'sharp-left';
+      case 'Left':
+        return 'turn-left';
+      case 'SlightRight':
+        return 'bear-right';
+      case 'SharpRight':
+        return 'sharp-right';
+      case 'Right':
+        return 'turn-right';
+      case 'TurnAround':
+        return 'u-turn';
+      case 'Straight':
+        return 'continue';
+      case 'EnterAgainstAllowedDirection':
+        return 'enter-roundabout';
+      case 'LeaveAgainstAllowedDirection':
+        return 'bear-right';
+      case 'Roundabout':
+        return 'enter-roundabout';
+      default:
+        // fall back to the default icons if you don't have a custom one
+        return 'continue';
+    }
+  }
+}
+
 const parseGeometry = (geometry: string): [number, number] | null => {
   const match = geometry.match(/POINT\((-?\d+\.?\d*) (-?\d+\.?\d*)\)/);
   if (!match) return null;
@@ -21,7 +76,7 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
   const map = useMap();
   const [control, setControl] = useState<L.Routing.Control | null>(null);
 
-  const detour = L.latLng(38.10640828782876, -91.06830100257955); // known detour to force reroute
+  // const detour = L.latLng(38.10640828782876, -91.06830100257955); // known detour to force reroute
   const parsedDestination = destination
     ? parseGeometry(destination.geometry)
     : null;
@@ -48,17 +103,10 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
         ).contains(userLatLng);
         const startPoint = inBounds ? userLatLng : fallbackStart;
 
-        const restrictedBounds = L.latLngBounds([
-          [38.111228, -91.050621],
-          [38.105008, -91.051716],
-        ]);
-
         // cleanup existing control
         if (control) {
           map.removeControl(control);
         }
-
-        let rerouted = false;
 
         const routingControl = L.Routing.control({
           waypoints: [startPoint, destLatLng],
@@ -76,32 +124,12 @@ const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
           routeWhileDragging: false,
           draggableWaypoints: false,
           createMarker: () => null,
-          formatter: new L.Routing.Formatter({
+          formatter: new RoutingFormatter({
             units: 'imperial',
             distanceTemplate: '{value} {unit}',
           }),
           show: true,
-        } as CustomRoutingControlOptions)
-          .on('routesfound', (e) => {
-            if (rerouted) return; // prevent infinite loop
-            const crossesRestricted = e.routes[0].coordinates.some((coord) =>
-              restrictedBounds.contains([coord.lat, coord.lng])
-            );
-
-            if (crossesRestricted) {
-              rerouted = true;
-
-              const waypoints = [
-                L.Routing.waypoint(startPoint),
-                L.Routing.waypoint(detour),
-                L.Routing.waypoint(destLatLng),
-              ];
-
-              // Replace waypoints with detour included
-              routingControl.setWaypoints(waypoints);
-            }
-          })
-          .addTo(map);
+        } as CustomRoutingControlOptions).addTo(map);
 
         setControl(routingControl);
       },
