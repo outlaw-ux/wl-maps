@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import 'leaflet-routing-machine';
 import UserLocationMarker from './UserLocationMarker';
 import type { Parcel } from '../types';
@@ -9,10 +9,8 @@ import { bounds } from '../constants';
 
 const MapLeaflet = ({
   destination,
-  setDestination,
 }: {
   readonly destination: Parcel | null;
-  readonly setDestination: React.Dispatch<React.SetStateAction<Parcel | null>>;
 }) => {
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
@@ -35,17 +33,6 @@ const MapLeaflet = ({
         <UserLocationMarker navigating={!!destination} />
         <LocateButton />
         <RoutingControl destination={destination} />
-        {destination && (
-          <Button
-            sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 1000 }}
-            aria-label="cancel navigation"
-            onClick={() => setDestination(null)}
-            variant="contained"
-            color="warning"
-          >
-            Cancel
-          </Button>
-        )}
       </MapContainer>
     </Box>
   );

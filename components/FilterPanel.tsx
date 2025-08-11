@@ -11,7 +11,6 @@ import {
   Button,
   Alert,
   Box,
-  Link,
 } from '@mui/material';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SendIcon from '@mui/icons-material/Send';
@@ -36,7 +35,18 @@ const FilterPanel = ({
   filterErrors,
   setFilterErrors,
 }: SidePanelProps) => {
-  const [currentFilter, setCurrentFilter] = React.useState<Filters>(filter);
+  const [currentFilter, setCurrentFilter] = React.useState<Filters | null>(
+    filter
+  );
+
+  React.useEffect(() => {
+    setCurrentFilter((prev) => {
+      if (JSON.stringify(filter) !== JSON.stringify(prev)) {
+        return filter;
+      }
+      return prev;
+    });
+  }, [filter]);
 
   const isMobile = useIsMobile();
 
@@ -50,18 +60,17 @@ const FilterPanel = ({
   };
 
   const handleNavigate = React.useCallback(() => {
-    if (!currentFilter.lot || !currentFilter.block || !currentFilter.section) {
-      setFilterErrors((prevErr) => ({
-        ...prevErr,
-        incompleteAddress: true,
-      }));
+    if (
+      !currentFilter?.lot ||
+      !currentFilter?.block ||
+      !currentFilter?.section
+    ) {
+      setFilterErrors({ incompleteAddress: true });
       return;
+    } else {
+      setFilterErrors({ incompleteAddress: false });
+      setFilter(currentFilter);
     }
-    setFilterErrors((prevErr) => ({
-      ...prevErr,
-      incompleteAddress: false,
-    }));
-    setFilter(currentFilter);
   }, [currentFilter, onClose, setFilter]);
 
   return (
@@ -99,7 +108,7 @@ const FilterPanel = ({
             <Stack spacing={2} sx={{ minWidth: 200 }}>
               <TextField
                 autoFocus
-                defaultValue={currentFilter.lot}
+                defaultValue={currentFilter?.lot}
                 label="Lot"
                 type="string"
                 size="small"
@@ -107,13 +116,13 @@ const FilterPanel = ({
                   nextFilter('lot', evt.target.value);
                 }}
                 helperText={
-                  filterErrors.incompleteAddress && !currentFilter.lot
+                  filterErrors.incompleteAddress && !currentFilter?.lot
                     ? 'Lot is required'
                     : ''
                 }
               />
               <TextField
-                defaultValue={currentFilter.block}
+                defaultValue={currentFilter?.block}
                 label="Block"
                 type="number"
                 size="small"
@@ -121,13 +130,13 @@ const FilterPanel = ({
                   nextFilter('block', evt.target.value);
                 }}
                 helperText={
-                  filterErrors.incompleteAddress && !currentFilter.block
+                  filterErrors.incompleteAddress && !currentFilter?.block
                     ? 'Block is required'
                     : ''
                 }
               />
               <TextField
-                defaultValue={currentFilter.section}
+                defaultValue={currentFilter?.section}
                 label="Section"
                 type="number"
                 size="small"
@@ -135,7 +144,7 @@ const FilterPanel = ({
                   nextFilter('section', evt.target.value);
                 }}
                 helperText={
-                  filterErrors.incompleteAddress && !currentFilter.section
+                  filterErrors.incompleteAddress && !currentFilter?.section
                     ? 'Section is required'
                     : ''
                 }
@@ -152,20 +161,7 @@ const FilterPanel = ({
           </AccordionDetails>
         </Accordion>
       </Box>
-      {/* provide attribution to @project-osrm/osrm  */}
-      <Box sx={{ p: 2, fontSize: '0.8rem', color: 'text.secondary' }}>
-        <span>
-          Map data ©{' '}
-          <Link href="https://www.openstreetmap.org/copyright">
-            OpenStreetMap
-          </Link>
-        </span>
-        <br />
-        <span>
-          Routing data ©{' '}
-          <Link href="https://project-osrm.org/">Project OSRM</Link>
-        </span>
-      </Box>
+
       {/* <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Layers</Typography>

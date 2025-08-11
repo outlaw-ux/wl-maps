@@ -22,10 +22,10 @@ export default function Container() {
       if (filter.lot && filter.block && filter.section) {
         const res = await fetchLBS(filter);
         if (res.length === 0) {
-          setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: true }));
+          setFilterErrors({ invalidAddress: true });
         } else {
           setDestination(res[0]);
-          setFilterErrors((prevErr) => ({ ...prevErr, invalidAddress: false }));
+          setFilterErrors({ invalidAddress: false });
           setOpen(false);
         }
       }
@@ -44,17 +44,33 @@ export default function Container() {
         onClose={toggle}
       />
       <Box sx={{ flex: 1, position: 'relative' }}>
-        <Button
-          sx={{ position: 'absolute', top: 16, left: 16, zIndex: 1000 }}
-          aria-label="open filters"
-          onClick={toggle}
-          variant="contained"
-          color="secondary"
-        >
-          <MenuIcon />
-        </Button>
+        {!destination && (
+          <Button
+            sx={{ position: 'absolute', top: 16, left: 16, zIndex: 1000 }}
+            aria-label="open filters"
+            onClick={toggle}
+            variant="contained"
+            color="secondary"
+          >
+            <MenuIcon />
+          </Button>
+        )}
         <Box sx={{ height: '100%' }}>
           <MapView destination={destination} setDestination={setDestination} />
+          {destination && (
+            <Button
+              sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 1000 }}
+              aria-label="cancel navigation"
+              onClick={() => {
+                setDestination(null);
+                setFilter({});
+              }}
+              variant="contained"
+              color="warning"
+            >
+              Cancel
+            </Button>
+          )}
         </Box>
       </Box>
     </Box>

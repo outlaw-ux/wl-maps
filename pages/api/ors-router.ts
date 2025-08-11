@@ -60,7 +60,6 @@ export default async function handler(
     );
 
     const data = await orsRes.json();
-    console.log('ORS Response:', data);
     res.status(orsRes.status).json(data);
   } catch (err) {
     res.status(500).json({ error: 'ORS proxy failed', details: err });

@@ -11,8 +11,7 @@ class RoutingFormatter extends L.Routing.Formatter {
   }
 
   getIconName(
-    instr: L.Routing.IInstruction,
-    i?: number
+    instr: L.Routing.IInstruction
   ):
     | 'depart'
     | 'via'

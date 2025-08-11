@@ -110,7 +110,6 @@ export function createORSRouter(
                     step.maneuver.type,
                     step.maneuver.modifier
                   );
-                  console.log('type', icon);
                   return {
                     road: step.name,
                     type: icon,
