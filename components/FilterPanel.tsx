@@ -13,6 +13,7 @@ import {
   ListItem,
   ListItemText,
   Typography,
+  List,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SendIcon from '@mui/icons-material/Send';
@@ -41,6 +42,7 @@ const FilterPanel = ({
   const [currentFilter, setCurrentFilter] = React.useState<Filters | null>(
     filter
   );
+  const [expandedSection, setExpandedSection] = React.useState<string | undefined>();
 
   React.useEffect(() => {
     setCurrentFilter((prev) => {
@@ -160,37 +162,37 @@ const FilterPanel = ({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Points of Interest</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {pois.map((poi) =>
-            poi.items.map((item) => (
-              <ListItem
-                key={item.name}
-                disableGutters
-                secondaryAction={
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => {
-                      console.log(
-                        `Navigating to ${item.name}`,
-                        item
-                      ); /* Implement navigation logic here */
-                    }}
-                  >
-                    GO
-                  </Button>
-                }
-              >
-                <ListItemText primary={item.name} />
-              </ListItem>
-            ))
-          )}
-        </AccordionDetails>
-      </Accordion>
+      {pois.map((poi) => (
+        <Accordion
+          key={poi.label}
+          expanded={expandedSection === poi.label}
+          onChange={(_, isExpanded) =>
+            setExpandedSection(isExpanded ? poi.label : undefined)
+          }
+          disableGutters
+          elevation={0}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {poi.icon}
+              <Typography fontWeight="bold">{poi.label}</Typography>
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
+            <List dense disablePadding>
+              {poi.items.map((item) => (
+                <ListItem
+                  key={item.name}
+                  disableGutters
+                  secondaryAction={<GoButton latlng={item.latlng} />}
+                >
+                  <ListItemText primary={item.name} />
+                </ListItem>
+              ))}
+            </List>
+          </AccordionDetails>
+        </Accordion>
+      ))}
     </Drawer>
   );
 };
