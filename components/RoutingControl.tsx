@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { CustomRoutingControlOptions, Parcel } from '../types';
 import { bounds, fallbackStart } from '../constants';
 import { createORSRouter } from '../utils/createORSRouter';
+import { parseGeometry } from '../utils/parseGeometry';
 
 class RoutingFormatter extends L.Routing.Formatter {
   constructor(options: L.Routing.FormatterOptions) {
@@ -59,26 +60,25 @@ class RoutingFormatter extends L.Routing.Formatter {
   }
 }
 
-const parseGeometry = (geometry: string): [number, number] | null => {
-  const match = geometry.match(/POINT\((-?\d+\.?\d*) (-?\d+\.?\d*)\)/);
-  if (!match) return null;
-  const [, lng, lat] = match;
-  return [parseFloat(lat), parseFloat(lng)];
-};
-
 const destinationIcon = L.icon({
   iconUrl: '/destination-marker.svg',
   iconSize: [24, 24],
 });
 
-const RoutingControl = ({ destination }: { destination: Parcel | null }) => {
+const RoutingControl = ({
+  destination,
+  poiDestination,
+}: {
+  destination: Parcel | null;
+  poiDestination?: [number, number];
+}) => {
   const map = useMap();
   const [control, setControl] = useState<L.Routing.Control | null>(null);
 
   // const detour = L.latLng(38.10640828782876, -91.06830100257955); // known detour to force reroute
   const parsedDestination = destination
     ? parseGeometry(destination.geometry)
-    : null;
+    : poiDestination;
   const [lat, lng] = parsedDestination ? parsedDestination : [];
   const destLatLng = lat && lng ? L.latLng(lat, lng) : null;
 

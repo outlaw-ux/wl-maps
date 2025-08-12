@@ -9,8 +9,10 @@ import { bounds } from '../constants';
 
 const MapLeaflet = ({
   destination,
+  poiDestination,
 }: {
   readonly destination: Parcel | null;
+  readonly poiDestination?: [number, number];
 }) => {
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
@@ -32,7 +34,10 @@ const MapLeaflet = ({
         <ZoomControl position="bottomright" />
         <UserLocationMarker navigating={!!destination} />
         <LocateButton />
-        <RoutingControl destination={destination} />
+        <RoutingControl
+          destination={destination}
+          poiDestination={poiDestination}
+        />
       </MapContainer>
     </Box>
   );

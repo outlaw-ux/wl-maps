@@ -23,12 +23,15 @@ import { useIsMobile } from '../hooks/useIsMobile';
 import { pois } from '../data/poi';
 
 interface SidePanelProps {
-  open: boolean;
-  onClose: () => void;
-  filter: Filters;
-  setFilter: React.Dispatch<React.SetStateAction<Filters>>;
-  filterErrors: IParcelsError;
-  setFilterErrors: React.Dispatch<React.SetStateAction<IParcelsError>>;
+  readonly open: boolean;
+  readonly onClose: () => void;
+  readonly filter: Filters;
+  readonly setFilter: React.Dispatch<React.SetStateAction<Filters>>;
+  readonly filterErrors: IParcelsError;
+  readonly setFilterErrors: React.Dispatch<React.SetStateAction<IParcelsError>>;
+  readonly setPoiDestination?: React.Dispatch<
+    React.SetStateAction<[number, number] | null>
+  >;
 }
 
 const FilterPanel = ({
@@ -38,11 +41,14 @@ const FilterPanel = ({
   setFilter,
   filterErrors,
   setFilterErrors,
+  setPoiDestination,
 }: SidePanelProps) => {
   const [currentFilter, setCurrentFilter] = React.useState<Filters | null>(
     filter
   );
-  const [expandedSection, setExpandedSection] = React.useState<string | undefined>();
+  const [expandedSection, setExpandedSection] = React.useState<
+    string | undefined
+  >();
 
   React.useEffect(() => {
     setCurrentFilter((prev) => {
@@ -184,7 +190,18 @@ const FilterPanel = ({
                 <ListItem
                   key={item.name}
                   disableGutters
-                  secondaryAction={<GoButton latlng={item.latlng} />}
+                  secondaryAction={
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => {
+                        setPoiDestination?.(item.latlng);
+                        onClose();
+                      }}
+                    >
+                      GO
+                    </Button>
+                  }
                 >
                   <ListItemText primary={item.name} />
                 </ListItem>

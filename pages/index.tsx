@@ -10,6 +10,9 @@ import { fetchLBS } from '../utils/fetchLBS';
 export default function Container() {
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState<Filters>({});
+  const [poiDestination, setPoiDestination] = useState<[number, number] | null>(
+    null
+  );
   const [filterErrors, setFilterErrors] = useState<IParcelsError>({
     invalidAddress: false,
     incompleteAddress: false,
@@ -42,6 +45,7 @@ export default function Container() {
         filter={filter}
         setFilter={setFilter}
         onClose={toggle}
+        setPoiDestination={setPoiDestination}
       />
       <Box sx={{ flex: 1, position: 'relative' }}>
         {!destination && (
@@ -56,7 +60,7 @@ export default function Container() {
           </Button>
         )}
         <Box sx={{ height: '100%' }}>
-          <MapView destination={destination} setDestination={setDestination} />
+          <MapView destination={destination} poiDestination={poiDestination} />
           {destination && (
             <Button
               sx={{ position: 'absolute', bottom: 16, left: 16, zIndex: 1000 }}
