@@ -79,7 +79,7 @@ const FilterInputs = () => {
           defaultValue={currentFilter?.lot}
           label="Lot"
           type="string"
-          inputMode="numeric"
+          slotProps={{ htmlInput: { inputMode: 'numeric' } }}
           size="small"
           onChange={(evt) => {
             nextFilter('lot', evt.target.value);
@@ -94,7 +94,7 @@ const FilterInputs = () => {
           defaultValue={currentFilter?.block}
           label="Block"
           type="string"
-          inputMode="numeric"
+          slotProps={{ htmlInput: { inputMode: 'numeric' } }}
           size="small"
           onChange={(evt) => {
             nextFilter('block', evt.target.value);
@@ -109,7 +109,7 @@ const FilterInputs = () => {
           defaultValue={currentFilter?.section}
           label="Section"
           type="string"
-          inputMode="numeric"
+          slotProps={{ htmlInput: { inputMode: 'numeric' } }}
           size="small"
           onChange={(evt) => {
             nextFilter('section', evt.target.value);
