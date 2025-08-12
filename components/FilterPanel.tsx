@@ -11,6 +11,7 @@ import {
   ListItemText,
   Typography,
   List,
+  Box,
 } from '@mui/material';
 import L from 'leaflet';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -25,77 +26,88 @@ const FilterPanel = () => {
     string | undefined
   >();
 
-  const { setDestination, sidepanelOpen, setSidepanelOpen,setDestinationTitle } =
-    useDestinationContext();
+  const {
+    setDestination,
+    sidepanelOpen,
+    setSidepanelOpen,
+    setDestinationTitle,
+  } = useDestinationContext();
 
   const isMobile = useIsMobile();
 
   return (
-    <Drawer anchor="left" variant={isMobile ? 'temporary' : 'permanent'} open={sidepanelOpen} onClose={() => setSidepanelOpen(false)}>
-      {isMobile && (
-        <IconButton
-          aria-label="close"
-          sx={{ alignSelf: 'end', m: 1 }}
-          onClick={() => {
-            setSidepanelOpen(false);
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      )}
-      <Accordion defaultExpanded>
-        <AccordionDetails>
-          <FilterInputs />
-        </AccordionDetails>
-      </Accordion>
-
-      {pois.map((poi) => (
-        <Accordion
-          key={poi.label}
-          expanded={expandedSection === poi.label}
-          onChange={(_, isExpanded) =>
-            setExpandedSection(isExpanded ? poi.label : undefined)
-          }
-          disableGutters
-          elevation={0}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              {poi.icon}
-              <Typography fontWeight="bold">{poi.label}</Typography>
-            </Stack>
-          </AccordionSummary>
+    <Drawer
+      anchor="left"
+      variant={isMobile ? 'temporary' : 'permanent'}
+      open={sidepanelOpen}
+      onClose={() => setSidepanelOpen(false)}
+    >
+      <Box sx={{ width: isMobile ? '100vw' : 300 }}>
+        {isMobile && (
+          <IconButton
+            aria-label="close"
+            sx={{ alignSelf: 'end', m: 1 }}
+            onClick={() => {
+              setSidepanelOpen(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
+        <Accordion defaultExpanded>
           <AccordionDetails>
-            <List dense disablePadding>
-              {poi.items.map((item) => (
-                <ListItem
-                  key={item.name}
-                  disableGutters
-                  secondaryAction={
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => {
-                        const latLng = L.latLng(
-                          item.latlng[0],
-                          item.latlng[1]
-                        );
-                        setDestination(latLng);
-                        setDestinationTitle(`${item.name} ${poi.label}`);
-                        setSidepanelOpen(false);
-                      }}
-                    >
-                      GO
-                    </Button>
-                  }
-                >
-                  <ListItemText primary={item.name} />
-                </ListItem>
-              ))}
-            </List>
+            <FilterInputs />
           </AccordionDetails>
         </Accordion>
-      ))}
+
+        {pois.map((poi) => (
+          <Accordion
+            key={poi.label}
+            expanded={expandedSection === poi.label}
+            onChange={(_, isExpanded) =>
+              setExpandedSection(isExpanded ? poi.label : undefined)
+            }
+            disableGutters
+            elevation={0}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                {poi.icon}
+                <Typography fontWeight="bold">{poi.label}</Typography>
+              </Stack>
+            </AccordionSummary>
+            <AccordionDetails>
+              <List dense disablePadding>
+                {poi.items.map((item) => (
+                  <ListItem
+                    key={item.name}
+                    disableGutters
+                    secondaryAction={
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                          const latLng = L.latLng(
+                            item.latlng[0],
+                            item.latlng[1]
+                          );
+                          setDestination(latLng);
+                          setDestinationTitle(`${item.name} ${poi.label}`);
+                          setSidepanelOpen(false);
+                        }}
+                      >
+                        GO
+                      </Button>
+                    }
+                  >
+                    <ListItemText primary={item.name} />
+                  </ListItem>
+                ))}
+              </List>
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </Box>
     </Drawer>
   );
 };

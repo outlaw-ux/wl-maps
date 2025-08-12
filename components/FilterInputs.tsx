@@ -15,6 +15,8 @@ const FilterInputs = () => {
     setSidepanelOpen,
     setDestinationTitle,
   } = useDestinationContext();
+
+  const [loading, setLoading] = React.useState(false);
   const [filterErrors, setFilterErrors] = React.useState<IParcelsError>({
     invalidAddress: false,
     incompleteAddress: false,
@@ -30,13 +32,13 @@ const FilterInputs = () => {
   };
 
   const handleNavigate = React.useCallback(async () => {
+    setLoading(true);
     if (
       !currentFilter?.lot ||
       !currentFilter?.block ||
       !currentFilter?.section
     ) {
       setFilterErrors({ incompleteAddress: true });
-      return;
     } else {
       setFilterErrors({ incompleteAddress: false });
       const lbs = await fetchLBS(currentFilter);
@@ -56,6 +58,7 @@ const FilterInputs = () => {
         setSidepanelOpen(false);
       }
     }
+    setLoading(false);
   }, [currentFilter]);
 
   return (
@@ -76,6 +79,7 @@ const FilterInputs = () => {
           defaultValue={currentFilter?.lot}
           label="Lot"
           type="string"
+          inputMode="numeric"
           size="small"
           onChange={(evt) => {
             nextFilter('lot', evt.target.value);
@@ -89,7 +93,8 @@ const FilterInputs = () => {
         <TextField
           defaultValue={currentFilter?.block}
           label="Block"
-          type="number"
+          type="string"
+          inputMode="numeric"
           size="small"
           onChange={(evt) => {
             nextFilter('block', evt.target.value);
@@ -103,7 +108,8 @@ const FilterInputs = () => {
         <TextField
           defaultValue={currentFilter?.section}
           label="Section"
-          type="number"
+          type="string"
+          inputMode="numeric"
           size="small"
           onChange={(evt) => {
             nextFilter('section', evt.target.value);
@@ -119,8 +125,9 @@ const FilterInputs = () => {
           variant="contained"
           endIcon={<SendIcon />}
           onClick={handleNavigate}
+          disabled={loading}
         >
-          Navigate
+          {loading ? 'Locating...' : 'Navigate'}
         </Button>
       </Stack>
     </>
