@@ -7,8 +7,8 @@ export type Filters = {
 };
 
 export interface IParcelsError {
-  readonly invalidAddress: boolean;
-  readonly incompleteAddress: boolean;
+  readonly invalidAddress?: boolean;
+  readonly incompleteAddress?: boolean;
 }
 
 export interface CustomRoutingControlOptions

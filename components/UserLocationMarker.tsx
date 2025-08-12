@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import { Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { generateUserIcon } from './Icons';
+import { useDestinationContext } from '../contexts/DestinationProvider';
 
-const UserLocationMarker = ({
-  navigating,
-}: {
-  readonly navigating: boolean;
-}) => {
+const UserLocationMarker = () => {
+  const { destination } = useDestinationContext();
+  const navigating = !!destination;
   const [position, setPosition] = useState<L.LatLng | null>(null);
   const map = useMap();
 

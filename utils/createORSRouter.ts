@@ -1,12 +1,70 @@
+import polyline from '@mapbox/polyline';
 import L from 'leaflet';
+
+const getIconName = (
+  maneuverType: string,
+  maneuverModifier: string
+): string => {
+  if (maneuverType === 'depart') {
+    return 'StartAt';
+  }
+  if (maneuverType === 'arrive') {
+    return 'DestinationReached';
+  }
+  if (maneuverType === 'turn' || maneuverType === 'continue') {
+    switch (maneuverModifier) {
+      case 'slight left':
+        return 'SlightLeft';
+      case 'sharp left':
+        return 'SharpLeft';
+      case 'left':
+        return 'Left';
+      case 'sharp right':
+        return 'SharpRight';
+      case 'slight right':
+        return 'SlightRight';
+      case 'right':
+        return 'Right';
+      case 'uturn':
+        return 'TurnAround';
+      case 'straight':
+      default:
+        return 'Straight';
+    }
+  }
+  // #1"new name"
+  if (maneuverType === 'new name' || maneuverType === 'use lane') {
+    return 'Straight';
+  }
+  // #4"merge"
+  if (
+    maneuverType === 'merge' ||
+    maneuverType === 'ramp' ||
+    maneuverType === 'on ramp'
+  ) {
+    return 'EnterAgainstAllowedDirection';
+  }
+  if (maneuverType === 'off ramp' || maneuverType === 'fork') {
+    return 'LeaveAgainstAllowedDirection';
+  }
+  if (
+    maneuverType === 'roundabout' ||
+    maneuverType === 'rotary' ||
+    maneuverType === 'roundabout turn' ||
+    maneuverType === 'exit rotary' ||
+    maneuverType === 'exit roundabout'
+  ) {
+    return 'Roundabout';
+  }
+
+  // #9"end of road"
+  // #15"notification"
+  return 'Straight';
+};
 
 export function createORSRouter(
   apiRouteUrl: string,
-  {
-    lot,
-    block,
-    section,
-  }: { readonly lot: string; readonly block: string; readonly section: string }
+  title: string
 ): L.Routing.IRouter {
   return {
     route(waypoints, callback, context) {
@@ -20,45 +78,50 @@ export function createORSRouter(
         .then((res) => res.json())
         .then((data) => {
           if (
-            data.features &&
-            Array.isArray(data.features) &&
-            data.features.length > 0 &&
-            data.features[0].geometry &&
-            data.features[0].geometry.coordinates &&
-            data.features[0].properties &&
-            data.features[0].properties.segments &&
-            Array.isArray(data.features[0].properties.segments) &&
-            data.features[0].properties.segments.length > 0
+            data &&
+            data.routes.length > 0 &&
+            data.routes[0].geometry &&
+            data.routes[0].legs &&
+            data.routes[0].legs.length > 0 &&
+            data.routes[0].legs[0].steps &&
+            Array.isArray(data.routes[0].legs[0].steps) &&
+            data.routes[0].legs[0].steps.length > 0
           ) {
-            const geometry = data.features[0].geometry.coordinates;
-            const latLngs = geometry.map(([lng, lat]: number[]) =>
-              L.latLng(lat, lng)
+            const geometry = polyline.toGeoJSON(data.routes[0].geometry, 6);
+
+            const coordinates = geometry.coordinates.map(
+              (coord) => [coord[1], coord[0]] // Convert to [lat, lng]
             );
 
             callback.call(context, null, [
               {
-                name: `Navigating to: ${lot}-${block}-${section}`,
-                coordinates: latLngs,
-                instructions: data.features[0].properties.segments[0].steps.map(
-                  (step) => ({
+                name: `Navigating to: ${title}`,
+                coordinates,
+                instructions: data.routes[0].legs[0].steps.map((step) => {
+                  const icon = getIconName(
+                    step.maneuver.type,
+                    step.maneuver.modifier
+                  );
+                  return {
                     road: step.name,
-                    type: step.type,
-                    text: step.instruction,
+                    type: icon,
+                    direction: 'E',
+                    exit: undefined,
+                    text: step.maneuver.instruction,
                     distance: step.distance,
                     time: step.duration,
-                  })
-                ),
+                  };
+                }),
                 summary: {
-                  totalDistance:
-                    data.features[0].properties.segments[0].distance,
-                  totalTime: data.features[0].properties.segments[0].duration,
+                  totalDistance: data.routes[0].distance,
+                  totalTime: data.routes[0].duration,
                 },
                 inputWaypoints: waypoints,
                 actualWaypoints: waypoints,
               },
             ]);
           } else {
-            callback.call(context, new Error("Invalid API response structure"));
+            callback.call(context, new Error('Invalid API response structure'));
           }
         })
         .catch((err) => callback.call(context, err));

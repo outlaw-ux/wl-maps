@@ -20,26 +20,41 @@ export default async function handler(
     });
   }
 
-  if (!process.env.HEIGIT_ORS_ACCESS_KEY) {
+  if (!process.env.STADIA_API_KEY) {
     return res.status(500).json({
-      error: 'Server configuration error: HEIGIT_ORS_ACCESS_KEY is not set.',
+      error: 'Server configuration error: STADIA_API_KEY is not set.',
     });
   }
 
   try {
     const orsRes = await fetch(
-      'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
+      `https://api.stadiamaps.com/route/v1?api_key=${process.env.STADIA_API_KEY}`,
       {
         method: 'POST',
         headers: {
-          Authorization: process.env.HEIGIT_ORS_ACCESS_KEY,
           'Content-Type': 'application/json',
           Accept:
             'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
         },
 
         body: JSON.stringify({
-          coordinates,
+          locations: [
+            {
+              lon: coordinates[0][0],
+              lat: coordinates[0][1],
+              type: 'break',
+            },
+            {
+              lon: coordinates[coordinates.length - 1][0],
+              lat: coordinates[coordinates.length - 1][1],
+              type: 'break',
+            },
+          ],
+          costing: 'auto',
+          units: 'miles',
+          instructions: true,
+          format: 'osrm',
+          steps: true,
         }),
       }
     );
