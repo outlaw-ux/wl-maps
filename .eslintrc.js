@@ -11,7 +11,7 @@ module.exports = {
     semi: 'error',
     'prefer-const': 'error',
     eqeqeq: 'error',
-    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'no-unused-vars': 'off',
     'no-console': 'warn',
     'no-debugger': 'warn',
     'prefer-spread': 'error',
@@ -32,6 +32,7 @@ module.exports = {
     'react/jsx-indent': ['error', 2],
     'react/jsx-indent-props': ['error', 2],
     'react/jsx-no-comment-textnodes': 'error',
+    '@typescript-eslint/no-unused-vars': ['error'],
   },
   settings: {
     react: {

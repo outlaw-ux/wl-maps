@@ -64,11 +64,7 @@ const getIconName = (
 
 export function createORSRouter(
   apiRouteUrl: string,
-  {
-    lot,
-    block,
-    section,
-  }: { readonly lot: string; readonly block: string; readonly section: string }
+  title: string
 ): L.Routing.IRouter {
   return {
     route(waypoints, callback, context) {
@@ -99,7 +95,7 @@ export function createORSRouter(
 
             callback.call(context, null, [
               {
-                name: `Navigating to: ${lot}-${block}-${section}`,
+                name: `Navigating to: ${title}`,
                 coordinates,
                 instructions: data.routes[0].legs[0].steps.map((step) => {
                   const icon = getIconName(

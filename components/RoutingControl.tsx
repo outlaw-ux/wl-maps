@@ -1,89 +1,24 @@
 import { Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useEffect, useState } from 'react';
-import type { CustomRoutingControlOptions, Parcel } from '../types';
+import type { CustomRoutingControlOptions } from '../types';
 import { bounds, fallbackStart } from '../constants';
 import { createORSRouter } from '../utils/createORSRouter';
-import { parseGeometry } from '../utils/parseGeometry';
-
-class RoutingFormatter extends L.Routing.Formatter {
-  constructor(options: L.Routing.FormatterOptions) {
-    super(options);
-  }
-
-  getIconName(
-    instr: L.Routing.IInstruction
-  ):
-    | 'depart'
-    | 'via'
-    | 'enter-roundabout'
-    | 'arrive'
-    | 'continue'
-    | 'bear-right'
-    | 'turn-right'
-    | 'sharp-right'
-    | 'u-turn'
-    | 'sharp-left'
-    | 'turn-left'
-    | 'bear-left' {
-    switch (instr.type) {
-      case 'StartAt':
-        return 'depart';
-      case 'DestinationReached':
-        return 'arrive';
-      case 'SlightLeft':
-        return 'bear-left';
-      case 'SharpLeft':
-        return 'sharp-left';
-      case 'Left':
-        return 'turn-left';
-      case 'SlightRight':
-        return 'bear-right';
-      case 'SharpRight':
-        return 'sharp-right';
-      case 'Right':
-        return 'turn-right';
-      case 'TurnAround':
-        return 'u-turn';
-      case 'Straight':
-        return 'continue';
-      case 'EnterAgainstAllowedDirection':
-        return 'enter-roundabout';
-      case 'LeaveAgainstAllowedDirection':
-        return 'bear-right';
-      case 'Roundabout':
-        return 'enter-roundabout';
-      default:
-        // fall back to the default icons if you don't have a custom one
-        return 'continue';
-    }
-  }
-}
+import { useDestinationContext } from '../contexts/DestinationProvider';
+import RoutingFormatter from '../utils/RoutingFormatter';
 
 const destinationIcon = L.icon({
   iconUrl: '/destination-marker.svg',
   iconSize: [24, 24],
 });
 
-const RoutingControl = ({
-  destination,
-  poiDestination,
-}: {
-  destination: Parcel | null;
-  poiDestination?: [number, number];
-}) => {
+const RoutingControl = () => {
+  const { destination, destinationTitle } = useDestinationContext();
   const map = useMap();
   const [control, setControl] = useState<L.Routing.Control | null>(null);
 
-  // const detour = L.latLng(38.10640828782876, -91.06830100257955); // known detour to force reroute
-  const parsedDestination = destination
-    ? parseGeometry(destination.geometry)
-    : poiDestination;
-  const [lat, lng] = parsedDestination ? parsedDestination : [];
-  const destLatLng = lat && lng ? L.latLng(lat, lng) : null;
-
   useEffect(() => {
-    if (!parsedDestination) {
+    if (!destination) {
       if (control) {
         map.removeControl(control);
         setControl(null);
@@ -108,12 +43,8 @@ const RoutingControl = ({
         }
 
         const routingControl = L.Routing.control({
-          waypoints: [startPoint, destLatLng],
-          router: createORSRouter('/api/ors-router', {
-            lot: destination?.lots?.join(', ') || '',
-            block: destination?.block,
-            section: destination?.section,
-          }),
+          waypoints: [startPoint, destination],
+          router: createORSRouter('/api/ors-router', destinationTitle),
           lineOptions: {
             addWaypoints: false,
             styles: [{ color: '#00f', weight: 2, opacity: 0.7 }],
@@ -138,8 +69,8 @@ const RoutingControl = ({
   }, [destination, map]);
 
   // Render the marker only after coordinates are available
-  return destLatLng ? (
-    <Marker position={destLatLng} icon={destinationIcon} />
+  return destination ? (
+    <Marker position={destination} icon={destinationIcon} />
   ) : null;
 };
 

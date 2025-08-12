@@ -4,167 +4,48 @@ import {
   IconButton,
   Accordion,
   AccordionDetails,
-  TextField,
   Stack,
   Button,
-  Alert,
-  Box,
   AccordionSummary,
   ListItem,
   ListItemText,
   Typography,
   List,
 } from '@mui/material';
+import L from 'leaflet';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
-import type { Filters, IParcelsError } from '../types';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { pois } from '../data/poi';
+import { useDestinationContext } from '../contexts/DestinationProvider';
+import FilterInputs from './FilterInputs';
 
-interface SidePanelProps {
-  readonly open: boolean;
-  readonly onClose: () => void;
-  readonly filter: Filters;
-  readonly setFilter: React.Dispatch<React.SetStateAction<Filters>>;
-  readonly filterErrors: IParcelsError;
-  readonly setFilterErrors: React.Dispatch<React.SetStateAction<IParcelsError>>;
-  readonly setPoiDestination?: React.Dispatch<
-    React.SetStateAction<[number, number] | null>
-  >;
-}
-
-const FilterPanel = ({
-  open,
-  onClose,
-  filter,
-  setFilter,
-  filterErrors,
-  setFilterErrors,
-  setPoiDestination,
-}: SidePanelProps) => {
-  const [currentFilter, setCurrentFilter] = React.useState<Filters | null>(
-    filter
-  );
+const FilterPanel = () => {
   const [expandedSection, setExpandedSection] = React.useState<
     string | undefined
   >();
 
-  React.useEffect(() => {
-    setCurrentFilter((prev) => {
-      if (JSON.stringify(filter) !== JSON.stringify(prev)) {
-        return filter;
-      }
-      return prev;
-    });
-  }, [filter]);
+  const { setDestination, sidepanelOpen, setSidepanelOpen,setDestinationTitle } =
+    useDestinationContext();
 
   const isMobile = useIsMobile();
 
-  const nextFilter = (key: string, value: string) => {
-    setCurrentFilter(() => {
-      return {
-        ...currentFilter,
-        [key]: value,
-      };
-    });
-  };
-
-  const handleNavigate = React.useCallback(() => {
-    if (
-      !currentFilter?.lot ||
-      !currentFilter?.block ||
-      !currentFilter?.section
-    ) {
-      setFilterErrors({ incompleteAddress: true });
-      return;
-    } else {
-      setFilterErrors({ incompleteAddress: false });
-      setFilter(currentFilter);
-    }
-  }, [currentFilter, onClose, setFilter]);
-
   return (
-    <Drawer
-      anchor="left"
-      open={open}
-      onClose={onClose}
-      variant={isMobile ? 'temporary' : 'permanent'}
-    >
+    <Drawer anchor="left" variant={isMobile ? 'temporary' : 'permanent'} open={sidepanelOpen} onClose={() => setSidepanelOpen(false)}>
       {isMobile && (
         <IconButton
           aria-label="close"
           sx={{ alignSelf: 'end', m: 1 }}
-          onClick={onClose}
+          onClick={() => {
+            setSidepanelOpen(false);
+          }}
         >
           <CloseIcon />
         </IconButton>
       )}
       <Accordion defaultExpanded>
         <AccordionDetails>
-          {filterErrors.incompleteAddress && (
-            <Box sx={{ pb: 2 }}>
-              <Alert severity="warning">Please fill in all fields</Alert>
-            </Box>
-          )}
-          {filterErrors.invalidAddress && (
-            <Box sx={{ pb: 2 }}>
-              <Alert severity="warning">Invalid property address</Alert>
-            </Box>
-          )}
-          <Stack spacing={2} sx={{ minWidth: 200 }}>
-            <TextField
-              autoFocus
-              defaultValue={currentFilter?.lot}
-              label="Lot"
-              type="string"
-              size="small"
-              onChange={(evt) => {
-                nextFilter('lot', evt.target.value);
-              }}
-              helperText={
-                filterErrors.incompleteAddress && !currentFilter?.lot
-                  ? 'Lot is required'
-                  : ''
-              }
-            />
-            <TextField
-              defaultValue={currentFilter?.block}
-              label="Block"
-              type="number"
-              size="small"
-              onChange={(evt) => {
-                nextFilter('block', evt.target.value);
-              }}
-              helperText={
-                filterErrors.incompleteAddress && !currentFilter?.block
-                  ? 'Block is required'
-                  : ''
-              }
-            />
-            <TextField
-              defaultValue={currentFilter?.section}
-              label="Section"
-              type="number"
-              size="small"
-              onChange={(evt) => {
-                nextFilter('section', evt.target.value);
-              }}
-              helperText={
-                filterErrors.incompleteAddress && !currentFilter?.section
-                  ? 'Section is required'
-                  : ''
-              }
-            />
-
-            <Button
-              variant="contained"
-              endIcon={<SendIcon />}
-              onClick={handleNavigate}
-            >
-              Navigate
-            </Button>
-          </Stack>
+          <FilterInputs />
         </AccordionDetails>
       </Accordion>
 
@@ -195,8 +76,13 @@ const FilterPanel = ({
                       variant="outlined"
                       size="small"
                       onClick={() => {
-                        setPoiDestination?.(item.latlng);
-                        onClose();
+                        const latLng = L.latLng(
+                          item.latlng[0],
+                          item.latlng[1]
+                        );
+                        setDestination(latLng);
+                        setDestinationTitle(`${item.name} ${poi.label}`);
+                        setSidepanelOpen(false);
                       }}
                     >
                       GO

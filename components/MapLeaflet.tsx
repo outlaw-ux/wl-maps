@@ -1,19 +1,16 @@
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import 'leaflet-routing-machine';
 import UserLocationMarker from './UserLocationMarker';
-import type { Parcel } from '../types';
 import RoutingControl from './RoutingControl';
 import LocateButton from './LocateMeButton';
-import { bounds } from '../constants';
+import { useDestinationContext } from '../contexts/DestinationProvider';
 
-const MapLeaflet = ({
-  destination,
-  poiDestination,
-}: {
-  readonly destination: Parcel | null;
-  readonly poiDestination?: [number, number];
-}) => {
+const MapLeaflet = () => {
+  const { destination, setDestination, setSidepanelOpen, setDestinationTitle } =
+    useDestinationContext();
+
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       <MapContainer
@@ -22,22 +19,48 @@ const MapLeaflet = ({
         zoom={14}
         minZoom={14}
         scrollWheelZoom={true}
-        maxBounds={bounds}
-        maxBoundsViscosity={1.0}
         zoomControl={false}
         style={{ height: '100%', width: '100%' }}
       >
+        {!destination ? (
+          <Button
+            sx={{ position: 'absolute', top: 16, left: 16, zIndex: 1000 }}
+            aria-label="open filters"
+            onClick={() => {
+              setSidepanelOpen(true);
+            }}
+            variant="contained"
+            color="secondary"
+          >
+            <MenuIcon />
+          </Button>
+        ) : (
+          <Button
+            sx={{
+              position: 'absolute',
+              bottom: 16,
+              left: 16,
+              zIndex: 1000,
+            }}
+            aria-label="cancel navigation"
+            onClick={() => {
+              setDestination(null);
+              setDestinationTitle('');
+            }}
+            variant="contained"
+            color="warning"
+          >
+            Cancel
+          </Button>
+        )}
         <TileLayer
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; </a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
         />
         <ZoomControl position="bottomright" />
-        <UserLocationMarker navigating={!!destination} />
+        <UserLocationMarker />
         <LocateButton />
-        <RoutingControl
-          destination={destination}
-          poiDestination={poiDestination}
-        />
+        <RoutingControl />
       </MapContainer>
     </Box>
   );
