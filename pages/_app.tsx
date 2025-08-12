@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Head from 'next/head';
 import { Analytics } from '@vercel/analytics/next';
 import type { AppProps } from 'next/app';
@@ -36,6 +36,7 @@ const WoodlandMapsApp = ({ Component, pageProps }: AppProps) => {
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
+      <SpeedInsights />
       <Analytics />
     </>
   );

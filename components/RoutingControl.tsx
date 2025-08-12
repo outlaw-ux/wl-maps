@@ -2,7 +2,6 @@ import { Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useEffect, useState } from 'react';
 import type { CustomRoutingControlOptions } from '../types';
-import { bounds, fallbackStart } from '../constants';
 import { createORSRouter } from '../utils/createORSRouter';
 import { useDestinationContext } from '../contexts/DestinationProvider';
 import RoutingFormatter from '../utils/RoutingFormatter';
@@ -32,10 +31,6 @@ const RoutingControl = () => {
           position.coords.latitude,
           position.coords.longitude
         );
-        const inBounds = L.latLngBounds(
-          bounds as [L.LatLngExpression, L.LatLngExpression]
-        ).contains(userLatLng);
-        const startPoint = inBounds ? userLatLng : fallbackStart;
 
         // cleanup existing control
         if (control) {
@@ -43,7 +38,7 @@ const RoutingControl = () => {
         }
 
         const routingControl = L.Routing.control({
-          waypoints: [startPoint, destination],
+          waypoints: [userLatLng, destination],
           router: createORSRouter('/api/ors-router', destinationTitle),
           lineOptions: {
             addWaypoints: false,
