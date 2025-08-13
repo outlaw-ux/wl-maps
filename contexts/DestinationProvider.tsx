@@ -6,6 +6,8 @@ interface IDestinationContextType {
   setDestination: React.Dispatch<React.SetStateAction<L.LatLng | null>>;
   sidepanelOpen: boolean;
   setSidepanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  startAtGate: boolean;
+  setStartAtGate: React.Dispatch<React.SetStateAction<boolean>>;
   currentFilter: Filters | null;
   setCurrentFilter: React.Dispatch<React.SetStateAction<Filters | null>>;
   destinationTitle: string;
@@ -22,6 +24,7 @@ export const DestinationContextProvider = ({
   children: ReactNode;
 }) => {
   const [sidepanelOpen, setSidepanelOpen] = useState(false);
+  const [startAtGate, setStartAtGate] = useState(false);
   const [destination, setDestination] = useState<L.LatLng>(null);
   const [destinationTitle, setDestinationTitle] = useState<string>('');
   const [currentFilter, setCurrentFilter] = React.useState<Filters | null>(
@@ -39,6 +42,8 @@ export const DestinationContextProvider = ({
         setCurrentFilter,
         destinationTitle,
         setDestinationTitle,
+        startAtGate,
+        setStartAtGate,
       }}
     >
       {children}

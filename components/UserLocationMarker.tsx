@@ -6,7 +6,7 @@ import { useDestinationContext } from '../contexts/DestinationProvider';
 import { bounds, fallbackStart } from '../constants';
 
 const UserLocationMarker = () => {
-  const { destination } = useDestinationContext();
+  const { destination, setStartAtGate } = useDestinationContext();
   const navigating = !!destination;
   const [position, setPosition] = useState<L.LatLng | null>(null);
   const map = useMap();
@@ -18,9 +18,9 @@ const UserLocationMarker = () => {
         let latlng = L.latLng(latitude, longitude);
         if (!bounds.contains(latlng)) {
           latlng = fallbackStart;
+          setStartAtGate(true);
         }
         setPosition(latlng);
-        alert('You are outside Woodland Lakes property, defaulting to gate location.');
 
         map.setView(latlng, map.getZoom());
       },

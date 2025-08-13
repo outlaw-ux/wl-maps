@@ -1,6 +1,5 @@
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { Box, Button } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import 'leaflet-routing-machine';
 import UserLocationMarker from './UserLocationMarker';
 import RoutingControl from './RoutingControl';
@@ -33,7 +32,7 @@ const MapLeaflet = () => {
             variant="contained"
             color="secondary"
           >
-            <MenuIcon />
+            Get Directions
           </Button>
         ) : (
           <Button
