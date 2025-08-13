@@ -94,6 +94,7 @@ const FilterPanel = () => {
                           setDestination(latLng);
                           setDestinationTitle(`${item.name} ${poi.label}`);
                           setSidepanelOpen(false);
+                          setExpandedSection(undefined);
                         }}
                       >
                         GO

@@ -1,11 +1,11 @@
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { Box, Button } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import 'leaflet-routing-machine';
 import UserLocationMarker from './UserLocationMarker';
 import RoutingControl from './RoutingControl';
 import LocateButton from './LocateMeButton';
 import { useDestinationContext } from '../contexts/DestinationProvider';
+import { fallbackStart } from '../constants';
 
 const MapLeaflet = () => {
   const { destination, setDestination, setSidepanelOpen, setDestinationTitle } =
@@ -14,8 +14,8 @@ const MapLeaflet = () => {
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       <MapContainer
+        center={fallbackStart}
         attributionControl={false}
-        center={[38.11288, -91.06786]}
         zoom={14}
         minZoom={14}
         scrollWheelZoom={true}
@@ -32,7 +32,7 @@ const MapLeaflet = () => {
             variant="contained"
             color="secondary"
           >
-            <MenuIcon />
+            Get Directions
           </Button>
         ) : (
           <Button

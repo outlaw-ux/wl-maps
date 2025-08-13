@@ -14,6 +14,7 @@ const FilterInputs = () => {
     setCurrentFilter,
     setSidepanelOpen,
     setDestinationTitle,
+    startAtGate,
   } = useDestinationContext();
 
   const [loading, setLoading] = React.useState(false);
@@ -129,6 +130,14 @@ const FilterInputs = () => {
         >
           {loading ? 'Locating...' : 'Navigate'}
         </Button>
+
+        {startAtGate && (
+          <Box sx={{ pb: 2 }}>
+            <Alert severity="info">
+              You appear to be outside Woodland Lakes. Starting from the Gate.
+            </Alert>
+          </Box>
+        )}
       </Stack>
     </>
   );
