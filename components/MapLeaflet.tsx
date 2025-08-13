@@ -6,6 +6,7 @@ import UserLocationMarker from './UserLocationMarker';
 import RoutingControl from './RoutingControl';
 import LocateButton from './LocateMeButton';
 import { useDestinationContext } from '../contexts/DestinationProvider';
+import { fallbackStart } from '../constants';
 
 const MapLeaflet = () => {
   const { destination, setDestination, setSidepanelOpen, setDestinationTitle } =
@@ -14,8 +15,8 @@ const MapLeaflet = () => {
   return (
     <Box sx={{ height: '100%', width: '100%' }}>
       <MapContainer
+        center={fallbackStart}
         attributionControl={false}
-        center={[38.11288, -91.06786]}
         zoom={14}
         minZoom={14}
         scrollWheelZoom={true}

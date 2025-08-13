@@ -5,6 +5,7 @@ import type { CustomRoutingControlOptions } from '../types';
 import { createORSRouter } from '../utils/createORSRouter';
 import { useDestinationContext } from '../contexts/DestinationProvider';
 import RoutingFormatter from '../utils/RoutingFormatter';
+import { bounds, fallbackStart } from '../constants';
 
 const destinationIcon = L.icon({
   iconUrl: '/destination-marker.svg',
@@ -27,10 +28,14 @@ const RoutingControl = () => {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const userLatLng = L.latLng(
+        let userLatLng = L.latLng(
           position.coords.latitude,
           position.coords.longitude
         );
+
+        if (!bounds.contains(userLatLng)) {
+          userLatLng = fallbackStart;
+        }
 
         // cleanup existing control
         if (control) {
@@ -54,7 +59,11 @@ const RoutingControl = () => {
             distanceTemplate: '{value} {unit}',
           }),
           show: true,
-        } as CustomRoutingControlOptions).addTo(map);
+        } as CustomRoutingControlOptions)
+          .on('routesfound', () => {
+            map.setView(fallbackStart, map.getZoom());
+          })
+          .addTo(map);
 
         setControl(routingControl);
       },

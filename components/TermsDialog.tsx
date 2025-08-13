@@ -37,7 +37,7 @@ const TermsDialog = ({
   return (
     <Dialog open disableEscapeKeyDown>
       <DialogTitle>Terms of Service</DialogTitle>
-      <DialogContent sx={{fontSize: '0.875rem'}}>
+      <DialogContent sx={{ fontSize: '0.875rem' }}>
         <Markdown>{quickTermsMarkdown}</Markdown>
       </DialogContent>
       <DialogActions>

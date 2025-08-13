@@ -63,7 +63,11 @@ These Terms may be updated without prior notice. The latest version will always 
 `;
 
 const tos = () => {
-  return <Box sx={{padding: '0.5rem'}}><Markdown>{fullTermsMarkdown}</Markdown></Box>;
+  return (
+    <Box sx={{ padding: '0.5rem' }}>
+      <Markdown>{fullTermsMarkdown}</Markdown>
+    </Box>
+  );
 };
 
 export default tos;
