@@ -55,6 +55,12 @@ export default async function handler(
           instructions: true,
           format: 'osrm',
           steps: true,
+          exclude_locations: [
+            { lat: 38.10462759529564, lon: -91.05112849823344}, // Mine Rd point
+            { lat: 38.10817647984096, lon: -91.0506928666514}, // Mine Rd point
+            { lat: 38.11825321415195, lon: -91.05589286552343}, // Mine Rd point
+            { lat: 38.13638330117941, lon: -91.04981471420726}, // Mine Rd point
+          ],
         }),
       }
     );

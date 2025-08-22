@@ -61,7 +61,7 @@ const RoutingControl = () => {
           show: true,
         } as CustomRoutingControlOptions)
           .on('routesfound', () => {
-            map.setView(fallbackStart, map.getZoom());
+            map.setView(userLatLng, map.getZoom());
           })
           .addTo(map);
 
